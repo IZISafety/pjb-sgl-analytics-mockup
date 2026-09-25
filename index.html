@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -175,7 +176,7 @@
   .values .tablewrap{margin-top:8px}
   .cards .events{margin-top:10px}
 
-  .kpichips{display:flex; flex-wrap:wrap; gap:10px}
+  .kpichips{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
   .kpichip{display:inline-flex; align-items:center; gap:9px; font-size:13px;
            border:1px solid #dbe3ea; border-radius:999px; padding:7px 13px 7px 15px;
            color:var(--ink-2); background:var(--surface)}
@@ -187,6 +188,11 @@
               color:var(--ink); font-weight:650}
   .kpichip.on .box{background:#1b4f9c; border-color:#1b4f9c; color:#fff}
   .kpichip .pill{margin-left:2px}
+  .kpichip.old{font-size:12px; padding:5.5px 11px 5.5px 12px; gap:7px}
+  .kpichip.old .box{width:15px; height:15px; font-size:9px}
+  .kpichip.old .dot{width:7px; height:7px}
+  .kpichip.old .pill{font-size:9.5px; padding:1px 5px}
+  .kpichip.old.on{padding:5px 10.5px 5px 11.5px}
   button.kpichip{font-family:inherit; cursor:pointer}
   button.kpichip:hover{border-color:#b9c7d3}
   button.kpichip:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
@@ -234,6 +240,7 @@
   <div class="card filterbar" style="margin-bottom:0">
     <div class="field"><label>Company</label><div class="fake-select">Select company <span class="caret">▾</span></div></div>
     <div class="field"><label>Site</label><div class="fake-select">Select site <span class="caret">▾</span></div></div>
+    <div class="field"><label>Typology</label><div class="fake-select">Select a typology <span class="caret">▾</span></div></div>
     <div class="field"><label>Period</label><div class="fake-select">01 to 30 Sep 2026 <span class="caret">▾</span></div></div>
   </div>
 
@@ -400,9 +407,9 @@
         <button type="button" class="kpichip on" aria-pressed="true"><i class="dot" style="background:#2563EB"></i><span>Work permit</span><i class="box">✓</i></button>
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#6B4E9E"></i><span>Interventions</span><i class="box">✓</i></button>
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#004196"></i><span>PJB &amp; SGL</span><span class="pill">New</span><i class="box">✓</i></button>
-        <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#94a3b8"></i><span>Prejob briefing</span><span class="pill keep">Old</span><i class="box">✓</i></button>
-        <button type="button" class="kpichip on" aria-pressed="true"><i class="dot" style="background:#0E7C5A"></i><span>Safety green light</span><span class="pill keep">Old</span><i class="box">✓</i></button>
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#E0A82E"></i><span>Life saving checks</span><i class="box">✓</i></button>
+        <button type="button" class="kpichip old" aria-pressed="false"><i class="dot" style="background:#94a3b8"></i><span>Prejob briefing</span><span class="pill keep">Old</span><i class="box">✓</i></button>
+        <button type="button" class="kpichip old on" aria-pressed="true"><i class="dot" style="background:#0E7C5A"></i><span>Safety green light</span><span class="pill keep">Old</span><i class="box">✓</i></button>
       </div>
       <p class="kpicount" id="x-count"><b>2</b> selected · min. 2 required</p>
 
@@ -905,12 +912,12 @@
       m:[88, 96, 74, 92, 104, 113, 108, 121, 112, 97, 103, 118] },
     { n:'PJB & SGL',          c:'#004196', on:false, vol:348, nc:17, rate:4.9, gac:63,
       m:[268, 291, 224, 279, 312, 338, 322, 361, 334, 288, 307, 348] },
+    { n:'Life saving checks', c:'#E0A82E', on:false, vol:96,  nc:11, rate:11.5, gac:0,
+      m:[72, 80, 59, 76, 85, 93, 88, 99, 91, 78, 83, 96] },
     { n:'Prejob briefing',    c:'#94a3b8', on:false, vol:149, nc:4,  rate:2.7, gac:0,
       m:[115, 127, 93, 121, 135, 147, 140, 158, 145, 124, 132, 149] },
     { n:'Safety green light', c:'#0E7C5A', on:true,  vol:153, nc:3,  rate:2,   gac:0,
-      m:[118, 131, 96, 124, 139, 151, 144, 162, 149, 127, 136, 153] },
-    { n:'Life saving checks', c:'#E0A82E', on:false, vol:96,  nc:11, rate:11.5, gac:0,
-      m:[72, 80, 59, 76, 85, 93, 88, 99, 91, 78, 83, 96] }
+      m:[118, 131, 96, 124, 139, 151, 144, 162, 149, 127, 136, 153] }
   ];
   function drawCross(){
     var sel = XK.filter(function(k){ return k.on; });
@@ -975,5 +982,6 @@
   var t; addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ render(); drawCross(); }, 160); });
 })();
 </script>
+
 </body>
 </html>
