@@ -2,7 +2,7 @@
 
 Mockup of the merged **Prejob briefing and Safety green light** analytics for the IZI Safety platform, built while the two old pages were redesigned into one.
 
-**Open it:** https://USER.github.io/REPO/
+**Open it:** https://izisafety.github.io/pjb-sgl-analytics-mockup/
 
 Every figure, company and site name in this page is invented. No client data is used.
 
