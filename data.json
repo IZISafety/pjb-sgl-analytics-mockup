@@ -1,0 +1,1085 @@
+{
+ "period": {
+  "label": "01 to 30 Sep 2026",
+  "days": 30
+ },
+ "outcome": {
+  "all": {
+   "go": 268,
+   "gac": 63,
+   "stop": 17,
+   "total": 348
+  },
+  "alone": {
+   "go": 119,
+   "gac": 18,
+   "stop": 4,
+   "total": 141
+  },
+  "accompanied": {
+   "go": 149,
+   "gac": 45,
+   "stop": 13,
+   "total": 207
+  }
+ },
+ "submitted": {
+  "all": 348,
+  "alone": 141,
+  "accompanied": 207
+ },
+ "companies": {
+  "alone": [
+   {
+    "name": "Company A",
+    "go": 41,
+    "gac": 4,
+    "stop": 0,
+    "total": 45,
+    "detection": 8.9
+   },
+   {
+    "name": "Company B",
+    "go": 26,
+    "gac": 5,
+    "stop": 2,
+    "total": 33,
+    "detection": 21.2
+   },
+   {
+    "name": "Company C",
+    "go": 21,
+    "gac": 4,
+    "stop": 1,
+    "total": 26,
+    "detection": 19.2
+   },
+   {
+    "name": "Company D",
+    "go": 18,
+    "gac": 3,
+    "stop": 1,
+    "total": 22,
+    "detection": 18.2
+   },
+   {
+    "name": "Company E",
+    "go": 13,
+    "gac": 2,
+    "stop": 0,
+    "total": 15,
+    "detection": 13.3
+   }
+  ],
+  "accompanied": [
+   {
+    "name": "Company A",
+    "go": 55,
+    "gac": 10,
+    "stop": 2,
+    "total": 67,
+    "detection": 17.9
+   },
+   {
+    "name": "Company B",
+    "go": 35,
+    "gac": 14,
+    "stop": 4,
+    "total": 53,
+    "detection": 34.0
+   },
+   {
+    "name": "Company C",
+    "go": 27,
+    "gac": 10,
+    "stop": 4,
+    "total": 41,
+    "detection": 34.1
+   },
+   {
+    "name": "Company D",
+    "go": 21,
+    "gac": 8,
+    "stop": 2,
+    "total": 31,
+    "detection": 32.3
+   },
+   {
+    "name": "Company E",
+    "go": 11,
+    "gac": 3,
+    "stop": 1,
+    "total": 15,
+    "detection": 26.7
+   }
+  ],
+  "all": [
+   {
+    "name": "Company A",
+    "go": 96,
+    "gac": 14,
+    "stop": 2,
+    "total": 112,
+    "detection": 14.3
+   },
+   {
+    "name": "Company B",
+    "go": 61,
+    "gac": 19,
+    "stop": 6,
+    "total": 86,
+    "detection": 29.1
+   },
+   {
+    "name": "Company C",
+    "go": 48,
+    "gac": 14,
+    "stop": 5,
+    "total": 67,
+    "detection": 28.4
+   },
+   {
+    "name": "Company D",
+    "go": 39,
+    "gac": 11,
+    "stop": 3,
+    "total": 53,
+    "detection": 26.4
+   },
+   {
+    "name": "Company E",
+    "go": 24,
+    "gac": 5,
+    "stop": 1,
+    "total": 30,
+    "detection": 20.0
+   }
+  ]
+ },
+ "sites": {
+  "alone": [
+   {
+    "name": "Site 1 (Depot)",
+    "go": 39,
+    "gac": 5,
+    "stop": 1,
+    "total": 45,
+    "detection": 13.3
+   },
+   {
+    "name": "Site 2 (Terminal)",
+    "go": 33,
+    "gac": 6,
+    "stop": 2,
+    "total": 41,
+    "detection": 19.5
+   },
+   {
+    "name": "Site 3 (Plant)",
+    "go": 27,
+    "gac": 4,
+    "stop": 1,
+    "total": 32,
+    "detection": 15.6
+   },
+   {
+    "name": "Site 4 (Field)",
+    "go": 20,
+    "gac": 3,
+    "stop": 0,
+    "total": 23,
+    "detection": 13.0
+   }
+  ],
+  "accompanied": [
+   {
+    "name": "Site 1 (Depot)",
+    "go": 49,
+    "gac": 12,
+    "stop": 3,
+    "total": 64,
+    "detection": 23.4
+   },
+   {
+    "name": "Site 2 (Terminal)",
+    "go": 41,
+    "gac": 15,
+    "stop": 5,
+    "total": 61,
+    "detection": 32.8
+   },
+   {
+    "name": "Site 3 (Plant)",
+    "go": 34,
+    "gac": 11,
+    "stop": 3,
+    "total": 48,
+    "detection": 29.2
+   },
+   {
+    "name": "Site 4 (Field)",
+    "go": 25,
+    "gac": 7,
+    "stop": 2,
+    "total": 34,
+    "detection": 26.5
+   }
+  ],
+  "all": [
+   {
+    "name": "Site 1 (Depot)",
+    "go": 88,
+    "gac": 17,
+    "stop": 4,
+    "total": 109,
+    "detection": 19.3
+   },
+   {
+    "name": "Site 2 (Terminal)",
+    "go": 74,
+    "gac": 21,
+    "stop": 7,
+    "total": 102,
+    "detection": 27.5
+   },
+   {
+    "name": "Site 3 (Plant)",
+    "go": 61,
+    "gac": 15,
+    "stop": 4,
+    "total": 80,
+    "detection": 23.8
+   },
+   {
+    "name": "Site 4 (Field)",
+    "go": 45,
+    "gac": 10,
+    "stop": 2,
+    "total": 57,
+    "detection": 21.1
+   }
+  ]
+ },
+ "workspaces": {
+  "alone": [
+   {
+    "name": "Workspace A",
+    "go": 90,
+    "gac": 12,
+    "stop": 2,
+    "total": 104,
+    "detection": 13.5
+   },
+   {
+    "name": "Workspace B",
+    "go": 29,
+    "gac": 6,
+    "stop": 2,
+    "total": 37,
+    "detection": 21.6
+   }
+  ],
+  "accompanied": [
+   {
+    "name": "Workspace A",
+    "go": 111,
+    "gac": 32,
+    "stop": 9,
+    "total": 152,
+    "detection": 27.0
+   },
+   {
+    "name": "Workspace B",
+    "go": 38,
+    "gac": 13,
+    "stop": 4,
+    "total": 55,
+    "detection": 30.9
+   }
+  ],
+  "all": [
+   {
+    "name": "Workspace A",
+    "go": 201,
+    "gac": 44,
+    "stop": 11,
+    "total": 256,
+    "detection": 21.5
+   },
+   {
+    "name": "Workspace B",
+    "go": 67,
+    "gac": 19,
+    "stop": 6,
+    "total": 92,
+    "detection": 27.2
+   }
+  ]
+ },
+ "entry": {
+  "alone": {
+   "start": 112,
+   "already_started": 9,
+   "standalone": 20
+  },
+  "accompanied": {
+   "start": 177,
+   "already_started": 13,
+   "standalone": 17
+  },
+  "all": {
+   "start": 289,
+   "already_started": 22,
+   "standalone": 37
+  }
+ },
+ "permit": {
+  "alone": {
+   "epermit": 98,
+   "paper": 23,
+   "standalone": 20
+  },
+  "accompanied": {
+   "epermit": 151,
+   "paper": 39,
+   "standalone": 17
+  },
+  "all": {
+   "epermit": 249,
+   "paper": 62,
+   "standalone": 37
+  }
+ },
+ "funnel": {
+  "alone": {
+   "self": 18,
+   "initiator": 0,
+   "maintained": 4,
+   "raised": 22
+  },
+  "accompanied": {
+   "self": 38,
+   "initiator": 7,
+   "maintained": 13,
+   "raised": 58
+  },
+  "all": {
+   "self": 56,
+   "initiator": 7,
+   "maintained": 17,
+   "raised": 80
+  }
+ },
+ "actions": {
+  "alone": {
+   "total": 18,
+   "photo": 9,
+   "written": 15
+  },
+  "accompanied": {
+   "total": 45,
+   "photo": 25,
+   "written": 36
+  },
+  "all": {
+   "total": 63,
+   "photo": 34,
+   "written": 51
+  }
+ },
+ "pjb_substance": {
+  "Attestation only, nothing written": 128,
+  "Partly written": 34,
+  "All four fields written": 45
+ },
+ "initiator": {
+  "escalated": 20,
+  "overridden": 7,
+  "upheld": 13
+ },
+ "initiators": [
+  {
+   "name": "Initiator A",
+   "escalated": 9,
+   "overrides": 3,
+   "rate": 33.3
+  },
+  {
+   "name": "Initiator B",
+   "escalated": 4,
+   "overrides": 2,
+   "rate": 50.0
+  },
+  {
+   "name": "Initiator C",
+   "escalated": 3,
+   "overrides": 1,
+   "rate": 33.3
+  },
+  {
+   "name": "Initiator D",
+   "escalated": 4,
+   "overrides": 1,
+   "rate": 25.0
+  }
+ ],
+ "categories": {
+  "alone": [
+   {
+    "name": "Equipment or tool defect",
+    "self": 4,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 5,
+    "ref": "PJB-2026-0400",
+    "example": "Gas detector past its calibration date",
+    "action": "Replaced with a calibrated unit from the store"
+   },
+   {
+    "name": "Access or work area not secured",
+    "self": 3,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 4,
+    "ref": "PJB-2026-0437",
+    "example": "Ladder footing unstable on loose gravel",
+    "action": "Repositioned on a steel plate, second person footing the ladder"
+   },
+   {
+    "name": "Missing or wrong PPE",
+    "self": 3,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 3,
+    "ref": "PJB-2026-0474",
+    "example": "Two crew members without cut-resistant gloves",
+    "action": "Gloves collected from the store before start"
+   },
+   {
+    "name": "Energy isolation not confirmed",
+    "self": 2,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 3,
+    "ref": "PJB-2026-0511",
+    "example": "Pump isolation not confirmed on the line",
+    "action": "Isolation verified with the control room, lock applied"
+   },
+   {
+    "name": "Weather or ground conditions",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 2,
+    "ref": "PJB-2026-0548",
+    "example": "Access road washed out after overnight rain",
+    "action": "Alternative access route used"
+   },
+   {
+    "name": "Lighting insufficient",
+    "self": 2,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 2,
+    "ref": "PJB-2026-0585",
+    "example": "Lighting insufficient in the work area",
+    "action": "Portable lighting installed"
+   },
+   {
+    "name": "Adjacent activity not coordinated",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 1,
+    "ref": "PJB-2026-0622",
+    "example": "Adjacent hot work in progress with no barrier in place",
+    "action": "Hot work paused and a barrier installed before start"
+   },
+   {
+    "name": "Labelling or documentation mismatch",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 1,
+    "ref": "PJB-2026-0659",
+    "example": "Valve labelling does not match the isolation drawing",
+    "action": "Line identified with the control room and re-tagged"
+   },
+   {
+    "name": "Gas or atmosphere check missing",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 1,
+    "ref": "PJB-2026-0696",
+    "example": "Atmosphere not tested before entry",
+    "action": "Reading taken and logged before entry"
+   }
+  ],
+  "accompanied": [
+   {
+    "name": "Equipment or tool defect",
+    "self": 8,
+    "initiator": 2,
+    "maintained": 2,
+    "total": 12,
+    "ref": "PJB-2026-0400",
+    "example": "Gas detector past its calibration date",
+    "action": "Replaced with a calibrated unit from the store"
+   },
+   {
+    "name": "Access or work area not secured",
+    "self": 6,
+    "initiator": 1,
+    "maintained": 3,
+    "total": 10,
+    "ref": "PJB-2026-0437",
+    "example": "Ladder footing unstable on loose gravel",
+    "action": "Repositioned on a steel plate, second person footing the ladder"
+   },
+   {
+    "name": "Missing or wrong PPE",
+    "self": 7,
+    "initiator": 1,
+    "maintained": 1,
+    "total": 9,
+    "ref": "PJB-2026-0474",
+    "example": "Two crew members without cut-resistant gloves",
+    "action": "Gloves collected from the store before start"
+   },
+   {
+    "name": "Energy isolation not confirmed",
+    "self": 4,
+    "initiator": 1,
+    "maintained": 2,
+    "total": 7,
+    "ref": "PJB-2026-0511",
+    "example": "Pump isolation not confirmed on the line",
+    "action": "Isolation verified with the control room, lock applied"
+   },
+   {
+    "name": "Weather or ground conditions",
+    "self": 3,
+    "initiator": 0,
+    "maintained": 3,
+    "total": 6,
+    "ref": "PJB-2026-0548",
+    "example": "Access road washed out after overnight rain",
+    "action": "Alternative access route used"
+   },
+   {
+    "name": "Lighting insufficient",
+    "self": 3,
+    "initiator": 1,
+    "maintained": 0,
+    "total": 4,
+    "ref": "PJB-2026-0585",
+    "example": "Lighting insufficient in the work area",
+    "action": "Portable lighting installed"
+   },
+   {
+    "name": "Adjacent activity not coordinated",
+    "self": 3,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 4,
+    "ref": "PJB-2026-0622",
+    "example": "Adjacent hot work in progress with no barrier in place",
+    "action": "Hot work paused and a barrier installed before start"
+   },
+   {
+    "name": "Labelling or documentation mismatch",
+    "self": 2,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 3,
+    "ref": "PJB-2026-0659",
+    "example": "Valve labelling does not match the isolation drawing",
+    "action": "Line identified with the control room and re-tagged"
+   },
+   {
+    "name": "Gas or atmosphere check missing",
+    "self": 1,
+    "initiator": 1,
+    "maintained": 0,
+    "total": 2,
+    "ref": "PJB-2026-0696",
+    "example": "Atmosphere not tested before entry",
+    "action": "Reading taken and logged before entry"
+   },
+   {
+    "name": "Other, uncategorised",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 1,
+    "ref": "PJB-2026-0733",
+    "example": "Task scope differs from what was briefed",
+    "action": "Scope confirmed with the supervisor before start"
+   }
+  ],
+  "all": [
+   {
+    "name": "Equipment or tool defect",
+    "self": 12,
+    "initiator": 2,
+    "maintained": 3,
+    "total": 17,
+    "ref": "PJB-2026-0400",
+    "example": "Gas detector past its calibration date",
+    "action": "Replaced with a calibrated unit from the store"
+   },
+   {
+    "name": "Access or work area not secured",
+    "self": 9,
+    "initiator": 1,
+    "maintained": 4,
+    "total": 14,
+    "ref": "PJB-2026-0437",
+    "example": "Ladder footing unstable on loose gravel",
+    "action": "Repositioned on a steel plate, second person footing the ladder"
+   },
+   {
+    "name": "Missing or wrong PPE",
+    "self": 10,
+    "initiator": 1,
+    "maintained": 1,
+    "total": 12,
+    "ref": "PJB-2026-0474",
+    "example": "Two crew members without cut-resistant gloves",
+    "action": "Gloves collected from the store before start"
+   },
+   {
+    "name": "Energy isolation not confirmed",
+    "self": 6,
+    "initiator": 1,
+    "maintained": 3,
+    "total": 10,
+    "ref": "PJB-2026-0511",
+    "example": "Pump isolation not confirmed on the line",
+    "action": "Isolation verified with the control room, lock applied"
+   },
+   {
+    "name": "Weather or ground conditions",
+    "self": 4,
+    "initiator": 0,
+    "maintained": 4,
+    "total": 8,
+    "ref": "PJB-2026-0548",
+    "example": "Access road washed out after overnight rain",
+    "action": "Alternative access route used"
+   },
+   {
+    "name": "Lighting insufficient",
+    "self": 5,
+    "initiator": 1,
+    "maintained": 0,
+    "total": 6,
+    "ref": "PJB-2026-0585",
+    "example": "Lighting insufficient in the work area",
+    "action": "Portable lighting installed"
+   },
+   {
+    "name": "Adjacent activity not coordinated",
+    "self": 4,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 5,
+    "ref": "PJB-2026-0622",
+    "example": "Adjacent hot work in progress with no barrier in place",
+    "action": "Hot work paused and a barrier installed before start"
+   },
+   {
+    "name": "Labelling or documentation mismatch",
+    "self": 3,
+    "initiator": 0,
+    "maintained": 1,
+    "total": 4,
+    "ref": "PJB-2026-0659",
+    "example": "Valve labelling does not match the isolation drawing",
+    "action": "Line identified with the control room and re-tagged"
+   },
+   {
+    "name": "Gas or atmosphere check missing",
+    "self": 2,
+    "initiator": 1,
+    "maintained": 0,
+    "total": 3,
+    "ref": "PJB-2026-0696",
+    "example": "Atmosphere not tested before entry",
+    "action": "Reading taken and logged before entry"
+   },
+   {
+    "name": "Other, uncategorised",
+    "self": 1,
+    "initiator": 0,
+    "maintained": 0,
+    "total": 1,
+    "ref": "PJB-2026-0733",
+    "example": "Task scope differs from what was briefed",
+    "action": "Scope confirmed with the supervisor before start"
+   }
+  ]
+ },
+ "top_n": 10,
+ "daily": {
+  "alone": {
+   "go": [
+    4,
+    5,
+    5,
+    6,
+    5,
+    5,
+    2,
+    4,
+    6,
+    5,
+    5,
+    3,
+    4,
+    3,
+    4,
+    4,
+    2,
+    3,
+    3,
+    5,
+    5,
+    3,
+    5,
+    3,
+    4,
+    3,
+    2,
+    5,
+    3,
+    3
+   ],
+   "gac": [
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0
+   ],
+   "stop": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "accompanied": {
+   "go": [
+    5,
+    4,
+    4,
+    4,
+    3,
+    4,
+    6,
+    7,
+    4,
+    3,
+    7,
+    5,
+    5,
+    4,
+    6,
+    7,
+    5,
+    5,
+    3,
+    7,
+    3,
+    5,
+    7,
+    3,
+    6,
+    7,
+    6,
+    6,
+    3,
+    5
+   ],
+   "gac": [
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    2,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "stop": [
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0
+   ]
+  },
+  "all": {
+   "go": [
+    9,
+    9,
+    9,
+    10,
+    8,
+    9,
+    8,
+    11,
+    10,
+    8,
+    12,
+    8,
+    9,
+    7,
+    10,
+    11,
+    7,
+    8,
+    6,
+    12,
+    8,
+    8,
+    12,
+    6,
+    10,
+    10,
+    8,
+    11,
+    6,
+    8
+   ],
+   "gac": [
+    2,
+    3,
+    1,
+    2,
+    3,
+    3,
+    2,
+    2,
+    2,
+    3,
+    2,
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    3,
+    1,
+    2,
+    2,
+    1,
+    3,
+    3,
+    1,
+    3,
+    3,
+    2,
+    3,
+    2
+   ],
+   "stop": [
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0,
+    2,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0
+   ]
+  }
+ },
+ "daily_labels": [
+  "01 Sep",
+  "02 Sep",
+  "03 Sep",
+  "04 Sep",
+  "05 Sep",
+  "06 Sep",
+  "07 Sep",
+  "08 Sep",
+  "09 Sep",
+  "10 Sep",
+  "11 Sep",
+  "12 Sep",
+  "13 Sep",
+  "14 Sep",
+  "15 Sep",
+  "16 Sep",
+  "17 Sep",
+  "18 Sep",
+  "19 Sep",
+  "20 Sep",
+  "21 Sep",
+  "22 Sep",
+  "23 Sep",
+  "24 Sep",
+  "25 Sep",
+  "26 Sep",
+  "27 Sep",
+  "28 Sep",
+  "29 Sep",
+  "30 Sep"
+ ],
+ "permit_daily": [
+  86.8,
+  91.6,
+  87.4,
+  77.0,
+  76.0,
+  69.6,
+  79.5,
+  75.8,
+  81.8,
+  71.0,
+  76.4,
+  73.8,
+  71.5,
+  71.6,
+  72.8,
+  71.6,
+  84.1,
+  80.8,
+  70.6,
+  83.7,
+  82.1,
+  90.5,
+  78.7,
+  78.6,
+  75.1,
+  81.0,
+  83.6,
+  81.3,
+  78.2,
+  84.1
+ ]
+}
