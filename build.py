@@ -39,15 +39,13 @@ for m in("alone","accompanied","all"): assert sum(EP[m].values())==D["submitted"
 D["entry"]=EP
 
 # ---- old pie kept: which permit the form hangs off ----
-# every intervention-linked form sits under an e-permit or a paper permit;
-# standalone forms sit under none. Totals must match the entry split.
-PM={"alone":{"epermit":98,"paper":23,"standalone":20},
-    "accompanied":{"epermit":151,"paper":39,"standalone":17}}
+# counted on the forms created at the check-in of an intervention only.
+# each of those sits under an e-permit or a paper permit, nothing else.
+PM={"alone":{"epermit":90,"paper":22},
+    "accompanied":{"epermit":141,"paper":36}}
 PM["all"]={k:PM["alone"][k]+PM["accompanied"][k] for k in PM["alone"]}
 for m in ("alone","accompanied","all"):
-    assert sum(PM[m].values())==D["submitted"][m], m
-    assert PM[m]["standalone"]==EP[m]["standalone"], m
-    assert PM[m]["epermit"]+PM[m]["paper"]==EP[m]["start"]+EP[m]["already_started"], m
+    assert PM[m]["epermit"]+PM[m]["paper"]==EP[m]["start"], m
 D["permit"]=PM
 
 # ---- N5: Stops and what was done about them (form level) ----
@@ -149,11 +147,36 @@ for m in("alone","accompanied","all"):
 D["daily"]=daily
 D["daily_labels"]=["%02d Sep"%d for d in range(1,n+1)]
 
-# ---- daily share of forms linked to an e-permit (the old prejob briefing widget) ----
+# ---- the permit block, day by day: counts per permit type ----
+# the population is the forms created at the check-in of an intervention, so the
+# daily bars must add up to entry.start, and each permit type to its own total.
 share=PM["all"]["epermit"]/(PM["all"]["epermit"]+PM["all"]["paper"])*100
-pd=[round(min(100.0,max(0.0,random.gauss(share,7))),1) for _ in range(n)]
-D["permit_daily"]=pd
-assert len(pd)==n and all(0<=x<=100 for x in pd)
+tot_all=[daily["all"]["go"][i]+daily["all"]["gac"][i]+daily["all"]["stop"][i] for i in range(n)]
+grand=sum(tot_all)
+
+def spread(total, weights):
+    """integer split of `total` over `weights`, largest remainder, never negative"""
+    raw=[total*w/sum(weights) for w in weights]
+    out=[int(x) for x in raw]
+    rest=total-sum(out)
+    order=sorted(range(len(raw)), key=lambda i: raw[i]-out[i], reverse=True)
+    for i in order[:rest]: out[i]+=1
+    return out
+
+checkin=spread(EP["all"]["start"], tot_all)
+day_share=[min(100.0,max(0.0,random.gauss(share,7))) for _ in range(n)]
+ep=spread(PM["all"]["epermit"], [max(0.01, checkin[i]*day_share[i]) for i in range(n)])
+ep=[min(ep[i], checkin[i]) for i in range(n)]
+missing=PM["all"]["epermit"]-sum(ep)
+i=0
+while missing>0:
+    if ep[i]<checkin[i]: ep[i]+=1; missing-=1
+    i=(i+1)%n
+pa=[checkin[i]-ep[i] for i in range(n)]
+D["permit_daily"]={"epermit":ep,"paper":pa}
+assert sum(ep)==PM["all"]["epermit"] and sum(pa)==PM["all"]["paper"]
+assert all(e>=0 and p>=0 for e,p in zip(ep,pa))
+assert sum(ep)+sum(pa)==EP["all"]["start"]
 
 json.dump(D,open("data.json","w",encoding="utf-8"),indent=1,ensure_ascii=False)
 print("ALL ASSERTIONS PASSED")
