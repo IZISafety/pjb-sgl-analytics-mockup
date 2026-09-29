@@ -13,8 +13,8 @@ Two tabs, as the platform has them:
 **PJB & SGL**
 
 - **Number of forms**: totals and a chart over the period, split by outcome (GO, GO corrected, STOP), with a volume / percentage toggle and a legend that hides and shows an outcome.
-- **Form origin**: at intervention start, during intervention, no intervention.
-- **Percentage of prejob briefing linked to an e-permit**: the existing widget, with the forms linked to no permit added so the slices reach 100%.
+- **Forms attachment to intervention**: a ring on every submitted form, at intervention check-in, during intervention, without intervention.
+- **Percentage of forms linked to an e-permit**: its own card. Two figures for the period, e-permit and paper permit, and a stacked bar chart of the two types day by day, with a legend that hides and shows a type. Counted on the forms created at intervention check-in only, standalone forms excluded.
 - **Comparison of results**: the three outcomes across companies, sites and workspaces.
 
 **Cross data**
@@ -27,6 +27,7 @@ Blocks designed but kept for a later release are in the file, hidden behind `dis
 
 - **Time axis**: up to 31 days, one bar per day. 32 to 92 days, one bar per fortnight. Beyond that, one bar per month. Values are summed in the bucket, and in percentage mode the share is computed on the bucket total rather than averaged across days.
 - **Outcome colours**: GO `#0E7C5A`, GO corrected `#6AA22B`, STOP `#C81E1E`. Two greens because both mean the work started; they are far enough apart to stay distinguishable under red-green colour blindness, and every chart also carries a label or a value table.
+- **The platform blue** `#004196` means the same thing in two places on purpose: the forms created at intervention check-in, and the e-permit share of those same forms.
 - **Wording**: STOP is never plural, the three outcomes are always capitalised, the merged form is written PJB & SGL.
 
 ## Files
@@ -52,7 +53,7 @@ open("../index.html", "w", encoding="utf-8").write(page.replace("/*__DATA__*/{}"
 EOF
 ```
 
-`build.py` refuses to write a payload that contradicts itself: the three outcomes must sum to the submitted total, origin and permit must each sum to the same total, and the forms with no permit must be the same count as the forms with no intervention.
+`build.py` refuses to write a payload that contradicts itself: the three outcomes must sum to the submitted total, the origin ring must sum to that same total, and the permit figures, over the period and day by day, must sum to the forms created at intervention check-in.
 
 ## Publishing
 
