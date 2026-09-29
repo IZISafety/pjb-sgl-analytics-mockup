@@ -166,6 +166,22 @@
   .values .tablewrap{margin-top:8px}
   .cards .events{margin-top:10px}
 
+  .chain{display:grid; grid-template-columns:1fr 34px 1fr; gap:6px 6px; align-items:stretch}
+  .chain .link{display:flex; flex-direction:column; gap:9px; min-width:0}
+  .chain .link .ring-h{min-height:2.6em}
+  .chain .arrow{position:relative; display:flex; align-items:center; justify-content:center;
+                color:#c3ced6; font-size:20px; line-height:1}
+  .chain .arrow::before{content:''; position:absolute; top:4px; bottom:4px; left:50%;
+                        width:1px; background:#dde3e7}
+  .chain .arrow span{position:relative; background:var(--surface); padding:7px 0}
+  @media (max-width:1080px){
+    .chain{grid-template-columns:1fr}
+    .chain .link{padding-bottom:4px}
+    .chain .link .ring-h{min-height:0}
+    .chain .arrow{min-height:28px}
+    .chain .arrow::before{top:50%; bottom:auto; left:0; right:0; width:auto; height:1px}
+    .chain .arrow span{transform:rotate(90deg); padding:0 7px}
+  }
   .kpichips{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
   .kpichip{display:inline-flex; align-items:center; gap:9px; font-size:13px;
            border:1px solid #dbe3ea; border-radius:999px; padding:7px 13px 7px 15px;
@@ -260,33 +276,25 @@
     </section>
   </div>
 
-  <!-- 2 · origin -->
+  <!-- 2 · one card: attachment, then permit type, then the share day by day -->
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Form origin</h3></div>
-      <p class="panel-sub">When the PJB &amp; SGL was opened, counted on every one submitted in the period.</p>
+      <h4 class="ring-h">Forms attachment to intervention</h4>
       <div class="grid two" style="margin-bottom:0; align-items:center">
         <div class="chart" id="c-types" data-h="210"></div>
         <div class="dlist" id="l-types"></div>
       </div>
-      <p class="footnote" style="margin-top:12px">Forms with <strong>no intervention</strong> are standalone forms: they hang off no intervention and no permit.</p>
     </section>
   </div>
 
-  <!-- 2b · permit type, the old widget rebuilt as it was -->
+  <!-- 2b · the e-permit share over the period, on its own -->
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Percentage of prejob briefing linked to an e-permit (during an intervention process)</h3></div>
-      <div class="grid two rings" style="margin-bottom:0; align-items:center">
-        <div class="ringbox">
-          <div class="chart" id="c-permit-daily" data-h="230"></div>
-        </div>
-        <div class="ringbox">
-          <div class="chart" id="c-permit" data-h="210"></div>
-          <div class="dlist" id="l-permit"></div>
-        </div>
-      </div>
-      <p class="footnote" style="margin-top:12px">The permit comes from the intervention the form was opened from. <strong>No permit</strong> means there is no intervention behind the form, a standalone form.</p>
+      <h4 class="ring-h">Percentage of forms linked to an e-permit</h4>
+      <div class="tiles" id="t-permit"></div>
+      <div class="chart" id="c-permit-daily" data-h="240"></div>
+      <div class="keys" id="permit-daily-keys"></div>
+      <p class="footnote" id="permit-daily-note"></p>
     </section>
   </div>
 
@@ -452,6 +460,7 @@
   var NS = 'http://www.w3.org/2000/svg';
   var mode = 'all', dim = 'companies', msr = 'volume', vol = 'volume';
   var cmpShow = { go:true, gac:true, stop:true };
+  var permitShow = { epermit:true, paper:true };
   var show = { go:true, gac:true, stop:true };
   var C = {};
   function tokens(){
@@ -591,8 +600,9 @@
     if (!box) return;
     var W = box.clientWidth || 300, H = +box.dataset.h || 220;
     var total = slices.reduce(function(a, s){ return a + s.v; }, 0);
-    var tiny = slices.some(function(s){ return s.v && s.v / total <= 0.09; });
-    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - (tiny ? 26 : 8), r = R * 0.62, a0 = -Math.PI / 2;
+    /* the ring always reserves room for an outside label, so two donuts side by side
+       come out the same size whether or not one of them has a small slice */
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.62, a0 = -Math.PI / 2;
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
     slices.forEach(function(s){
       if (!s.v) return;
@@ -711,20 +721,37 @@
                        ' Click an outcome in the key to hide it.');
 
     donut($('c-types'), $('l-types'), [
-      { n:'At intervention start', v:EP.start, c:C.cat2 },
-      { n:'During intervention', v:EP.already_started, c:C.cat2b },
-      { n:'No intervention', v:EP.standalone, c:C.cat3 } ]);
+      { n:'At intervention check-in', v:EP.start, c:C.brand },
+      { n:'During intervention', v:EP.already_started, c:C.cat2 },
+      { n:'Without intervention', v:EP.standalone, c:C.cat3 } ]);
 
     var PM = D.permit[mode];
-    donut($('c-permit'), $('l-permit'), [
-      { n:'Linked to e-permit', v:PM.epermit, c:C.brand,
-        d:'Prejob briefing linked to an e-permit (during an intervention process)' },
-      { n:'Linked to paper permit', v:PM.paper, c:C.cat1, d:'Permit issued on paper' },
-      { n:'No permit', v:PM.standalone, c:C.cat3,
-        d:'No intervention behind the form, so no permit: a standalone form' } ]);
+    var permitTotal = PM.epermit + PM.paper;
+    $('t-permit').innerHTML =
+      tile(fmt(PM.epermit) + ' <span style="font-size:15px; color:var(--ink-3)">' +
+           pct(PM.epermit, permitTotal) + '%</span>', 'Linked to e-permit') +
+      tile(fmt(PM.paper) + ' <span style="font-size:15px; color:var(--ink-3)">' +
+           pct(PM.paper, permitTotal) + '%</span>', 'Linked to paper permit');
+    var pdTb = timeBuckets(D.daily_labels);
+    var permitSeries = [
+      { key:'epermit', name:'Linked to e-permit',     color:C.brand, data:bucketSeries(D.permit_daily.epermit, pdTb.groups) },
+      { key:'paper',   name:'Linked to paper permit', color:C.cat1,  data:bucketSeries(D.permit_daily.paper,   pdTb.groups) } ];
     columns($('c-permit-daily'), {
-      categories:D.daily_labels, tickEvery:4, suffix:'%', max:100,
-      series:[{ name:'Linked to an e-permit', color:C.brand, data:D.permit_daily }] });
+      categories:pdTb.groups.map(function(g){ return g.label; }),
+      tickEvery: pdTb.size === 1 ? 4 : 1, integer:true, valueLabels:true,
+      series:permitSeries.filter(function(x){ return permitShow[x.key]; }) });
+    $('permit-daily-keys').innerHTML = permitSeries.map(function(x){
+      return '<button type="button" class="key" data-s="' + x.key + '" aria-pressed="' +
+             permitShow[x.key] + '"><i class="sw" style="background:' + x.color + '"></i> ' +
+             esc(x.name) + '</button>';
+    }).join('');
+    var pShare = pct(PM.epermit, PM.epermit + PM.paper);
+    $('permit-daily-note').innerHTML =
+      'PJB &amp; SGL created at intervention check-in, day by day and by permit type. ' +
+      'Standalone forms are excluded.' +
+      (permitShow.epermit && permitShow.paper
+        ? ' Click a permit type in the key to hide it.'
+        : ' Hidden: ' + (permitShow.epermit ? 'Linked to paper permit' : 'Linked to e-permit') + '.');
 
     /* briefing substance, accompanied forms only */
     var PS = D.pjb_substance,
@@ -880,6 +907,14 @@
     if (on && live === 1) return;            // never hide the last one
     cmpShow[k] = !on; b.setAttribute('aria-pressed', String(!on));
     drawCompare();
+  });
+  $('permit-daily-keys').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    var k = b.dataset.s, on = b.getAttribute('aria-pressed') === 'true';
+    var live = Object.keys(permitShow).filter(function(x){ return permitShow[x]; }).length;
+    if (on && live === 1) return;            // never hide the last one
+    permitShow[k] = !on;
+    render();
   });
   $('daily-keys').addEventListener('click', function(e){
     var b = e.target.closest('button'); if (!b) return;
