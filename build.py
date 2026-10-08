@@ -178,6 +178,206 @@ assert sum(ep)==PM["all"]["epermit"] and sum(pa)==PM["all"]["paper"]
 assert all(e>=0 and p>=0 for e,p in zip(ep,pa))
 assert sum(ep)+sum(pa)==EP["all"]["start"]
 
+# ---- HSE Observation, the new tab ----
+# an observation reports either a good practice or an anomaly; an anomaly may carry
+# corrective actions, which have no status today, so we can only count whether one exists.
+# golden rules and categories are multi-select, so an observation can count in several
+# rows: these lists sum to more than the number of observations, never less.
+# a good practice carries no golden rule, so the rules only break down the anomalies
+RULES=[("Risky situations",        26),
+       ("PPE",                     21),
+       ("Body Mechanics & Tools",  18),
+       ("Work permit",             15),
+       ("Traffic",                 14),
+       ("Work at height",          13),
+       ("Lifting operations",      11),
+       ("Line of danger",          10),
+       ("Energized Systems",        9),
+       ("Confined spaces",          8),
+       ("Hot works",                7),
+       ("Excavation work",          6)]
+CATS=[("Health",      41, 22),
+      ("Safety",      96, 63),
+      ("Security",    33, 19),
+      ("Environment", 28, 16)]
+
+HG, HA = 128, 84
+HT = HG + HA
+
+HC=[("Company A",38,22),("Company B",29,19),("Company C",27,16),
+    ("Company D",23,15),("Company E",11,12)]
+HS=[("Site 1 (Depot)",41,24),("Site 2 (Terminal)",34,21),
+    ("Site 3 (Plant)",30,22),("Site 4 (Field)",23,17)]
+HW=[("Workspace A",86,51),("Workspace B",42,33)]
+for rows in (HC,HS,HW):
+    assert sum(r[1] for r in rows)==HG and sum(r[2] for r in rows)==HA
+
+# a multi-select list: every row fits inside the population, and the whole covers it
+assert all(r[1]<=HG and r[2]<=HA for r in CATS)
+assert sum(r[1] for r in CATS)>=HG and sum(r[2] for r in CATS)>=HA
+# the rules are multi-select too, on the anomalies alone
+assert all(r[1]<=HA for r in RULES) and sum(r[1] for r in RULES)>=HA
+
+# ticking a golden rule opens a second multi-select, "Observed anomaly", the list of what
+# can go wrong under that rule, with "Compliant" at the top. A rule's count is every anomaly
+# that ticked it, Compliant answers included: the bar says the rule was looked at, and the
+# modal says what was found. The list is optional, the rule is not.
+SITU={
+ "Risky situations":["Smoking or vaping outside the authorised areas",
+                     "Worker or driver under the influence of alcohol or drugs",
+                     "Degraded situation left unsecured and unreported",
+                     "Risks not identified before a non routine or complex operation",
+                     "Start and stop instructions for equipment not followed"],
+ "Traffic":["Vehicle condition not checked before use",
+            "Seatbelt not fastened",
+            "Speeding or driving unsuited to road conditions",
+            "Use of a communication device while driving",
+            "Driving time or journey management plan not respected",
+            "Pedestrian or cyclist traveling outside designated routes",
+            "Handrail not held when taking the stairs"],
+ "Work permit":["Pre-job briefing not signed",
+                "Safety Green Light not done",
+                "No stop, risk reassessment or supervisor notification when conditions changed"],
+ "Confined spaces":["No permit and/or confined-space entry certificate",
+                    "No verification of isolation from energy and/or fluid sources",
+                    "No respiratory protection when required",
+                    "No rescue plan",
+                    "Atmosphere not tested prior to intervention",
+                    "No atmosphere monitoring",
+                    "No entry/exit supervision",
+                    "Unauthorized entry"],
+ "Hot works":["No hot work permit",
+              "Flammable substance or ignition source nearby",
+              "No written authorization before starting hot work",
+              "Gas test not performed in the hazardous area",
+              "No continuous gas monitoring in the hazardous area"],
+ "Line of danger":["Positioned in the path of a pressure release",
+                   "Positioned in the path of a dropped object",
+                   "No safety barriers or exclusion zones",
+                   "Loose objects not secured",
+                   "No respect of safety barriers or exclusion zones"],
+ "Excavation work":["No safe access when the excavation is deeper than 1.3 m (4 ft)",
+                    "No shoring or sloping of the walls",
+                    "Underground networks not located before digging",
+                    "Spoil stored at the edge of the excavation"],
+ # the five lists below are still placeholders, the real wording is in the app
+ "PPE":["Helmet not worn in the required zone","Eye protection missing",
+        "Gloves not suited to the product handled","Hearing protection not worn"],
+ "Body Mechanics & Tools":["Manual handling beyond the allowed load","Tool not suited to the task",
+                           "Damaged or modified tool kept in service","Working posture at risk"],
+ "Lifting operations":["Load passing over people","Sling or accessory not checked",
+                       "Exclusion zone not marked","Lifting plan missing"],
+ "Energized Systems":["Isolation not verified before work","Lock out tag out not applied",
+                      "Stored energy not released","Live work without authorisation"],
+ "Work at height":["Harness not clipped","Guardrail missing or incomplete",
+                   "Ladder used as a work platform","Tools not secured against dropping"]}
+RULE_SITU={}
+for name,a in RULES:
+    names=SITU[name]
+    compliant=max(1,round(a*0.15))         # ticked the rule, answered Compliant, nothing wrong
+    unspec=max(1,round(a*0.10))            # ticked the rule, answered nothing
+    placed=a-compliant-unspec              # ticked at least one line of the list
+    assert placed>0, name
+    w=[6,5,4,3,3][:len(names)] if len(names)<=5 else [6]*len(names)
+    split=spread(round(placed*1.3), w)
+    split=[min(v,placed) for v in split]
+    while sum(split)<placed:
+        i=split.index(min(split)); split[i]+=1
+    RULE_SITU[name]={"rows":[{"name":names[i],"anom":split[i]} for i in range(len(names))],
+                     "unspecified":unspec,
+                     "compliant":compliant}
+    assert all(v<=placed for v in split) and sum(split)>=placed, name
+    assert compliant+unspec<=a, name
+
+# the Stop Card: one mandatory yes/no at the end of every anomaly form, so the answer
+# exists on all of them and the rate is always out of the anomalies, never out of a subset.
+SC=37                                            # anomalies where a Stop Card was used
+assert 0 <= SC <= HA
+
+SC_RULES={}
+for name,a in RULES:                             # multi-select, so these sum to more than SC
+    SC_RULES[name]=min(a, max(0, round(a*random.uniform(.18,.62))))
+assert all(v<=dict(RULES)[k] for k,v in SC_RULES.items())
+assert sum(SC_RULES.values())>=SC
+SC_CATS={c[0]:min(c[2], max(0, round(c[2]*random.uniform(.30,.55)))) for c in CATS}
+assert all(SC_CATS[c[0]]<=c[2] for c in CATS) and sum(SC_CATS.values())>=SC
+AE=41                                            # anomalies raised during an intervention
+assert AE<=HA
+SC_ENTRY_DURING=18                               # of those, with a Stop Card
+assert SC_ENTRY_DURING<=min(AE,SC) and SC-SC_ENTRY_DURING<=HA-AE
+SC_ACTION=29                                     # Stop Cards that also carry a corrective action
+assert SC_ACTION<=SC
+SC_COMP=spread(SC,[r[2] for r in HC]); SC_COMP=[min(SC_COMP[i],HC[i][2]) for i in range(len(HC))]
+SC_SITE=spread(SC,[r[2] for r in HS]); SC_SITE=[min(SC_SITE[i],HS[i][2]) for i in range(len(HS))]
+SC_WORK=spread(SC,[r[2] for r in HW]); SC_WORK=[min(SC_WORK[i],HW[i][2]) for i in range(len(HW))]
+
+hgd=spread(HG,[max(0.01,random.gauss(1,.35)) for _ in range(n)])
+had=spread(HA,[max(0.01,random.gauss(1,.40)) for _ in range(n)])
+assert sum(hgd)==HG and sum(had)==HA
+
+# a Stop Card lives on an anomaly, so a day can never hold more of them than it holds
+# anomalies: weight the split by the day's anomalies, clamp, then place what is left
+# on the days that still have room
+sc_daily=spread(SC,[max(0.0001,had[i]) for i in range(n)])
+sc_daily=[min(sc_daily[i],had[i]) for i in range(n)]
+left=SC-sum(sc_daily)
+while left>0:
+    room=sorted(((had[j]-sc_daily[j],j) for j in range(n)), reverse=True)
+    assert room[0][0]>0, "no room left for the Stop Cards"
+    for r,j in room:
+        if left==0: break
+        if r>0:
+            sc_daily[j]+=1; left-=1
+assert sum(sc_daily)==SC and all(sc_daily[i]<=had[i] for i in range(n))
+
+HSE={
+ "submitted":HT, "good":HG, "anom":HA,
+ "daily":{"good":hgd,"anom":had},
+ "entry":{"during":97,"standalone":HT-97},
+ "actions":{"with_action":61},
+ "stopcard":{"used":SC,
+             "daily":sc_daily,
+             "rules":[{"name":r[0],"anom":r[1],"stop":SC_RULES[r[0]]} for r in RULES],
+             "categories":[{"name":c[0],"anom":c[2],"stop":SC_CATS[c[0]]} for c in CATS],
+             "companies":[{"name":HC[i][0],"anom":HC[i][2],"stop":SC_COMP[i]} for i in range(len(HC))],
+             "sites":[{"name":HS[i][0],"anom":HS[i][2],"stop":SC_SITE[i]} for i in range(len(HS))],
+             "workspaces":[{"name":HW[i][0],"anom":HW[i][2],"stop":SC_WORK[i]} for i in range(len(HW))],
+             "entry":{"anom_during":AE,"stop_during":SC_ENTRY_DURING},
+             "actions":{"stop_with_action":SC_ACTION}},
+ "rules":[{"name":r[0],"anom":r[1],"situations":RULE_SITU[r[0]]} for r in RULES],
+ "categories":[{"name":c[0],"good":c[1],"anom":c[2],"total":c[1]+c[2]} for c in CATS],
+ "companies":[{"name":r[0],"good":r[1],"anom":r[2],"total":r[1]+r[2]} for r in HC],
+ "sites":[{"name":r[0],"good":r[1],"anom":r[2],"total":r[1]+r[2]} for r in HS],
+ "workspaces":[{"name":r[0],"good":r[1],"anom":r[2],"total":r[1]+r[2]} for r in HW],
+}
+assert HSE["good"]+HSE["anom"]==HSE["submitted"]
+assert sum(HSE["entry"].values())==HSE["submitted"]
+assert 0 <= HSE["actions"]["with_action"] <= HSE["anom"]
+SCB=HSE["stopcard"]
+assert 0 <= SCB["used"] <= HSE["anom"]
+assert sum(SCB["daily"])==SCB["used"] and len(SCB["daily"])==n
+for k in ("companies","sites","workspaces"):
+    assert sum(r["stop"] for r in SCB[k])==SCB["used"], k
+    assert all(r["stop"]<=r["anom"] for r in SCB[k]), k
+assert SCB["entry"]["anom_during"]<=HSE["anom"]
+assert SCB["entry"]["stop_during"]<=min(SCB["entry"]["anom_during"], SCB["used"])
+assert SCB["used"]-SCB["entry"]["stop_during"] <= HSE["anom"]-SCB["entry"]["anom_during"]
+assert SCB["actions"]["stop_with_action"]<=min(SCB["used"], HSE["actions"]["with_action"])
+for k in ("rules","categories"):                 # multi-select: at least the total, never a row above its own population
+    assert sum(r["stop"] for r in SCB[k])>=SCB["used"], k
+    assert all(r["stop"]<=r["anom"] for r in SCB[k]), k
+for k in ("companies","sites","workspaces"):
+    assert sum(r["total"] for r in HSE[k])==HSE["submitted"], k
+assert sum(r["total"] for r in HSE["categories"])>=HSE["submitted"]
+assert sum(r["anom"] for r in HSE["rules"])>=HSE["anom"]
+assert all(r["anom"]<=HSE["anom"] for r in HSE["rules"])
+for r in HSE["rules"]:
+    S=r["situations"]; placed=r["anom"]-S["unspecified"]-S["compliant"]
+    assert S["unspecified"]+S["compliant"]<=r["anom"], r["name"]
+    assert all(x["anom"]<=placed for x in S["rows"]), r["name"]
+    assert sum(x["anom"] for x in S["rows"])>=placed, r["name"]
+D["hse"]=HSE
+
 json.dump(D,open("data.json","w",encoding="utf-8"),indent=1,ensure_ascii=False)
 print("ALL ASSERTIONS PASSED")
 for m in("all","alone","accompanied"):
@@ -185,3 +385,9 @@ for m in("all","alone","accompanied"):
     print(f"{m:12s} forms {o['total']:4d} · risk raised {f['raised']:3d} "
           f"({round(f['raised']/o['total']*100,1):4}%) · self {f['self']:2d} · initiator {f['initiator']} · "
           f"maintained {f['maintained']:2d} · actions {a['total']:2d} (photo {round(a['photo']/a['total']*100)}%)")
+H=D["hse"]
+print(f"stop card    used on {H['stopcard']['used']:3d} of {H['anom']} anomalies "
+      f"({round(H['stopcard']['used']/H['anom']*100,1)}%)")
+print(f"hse          observations {H['submitted']:4d} · good practice {H['good']:3d} · anomalies {H['anom']:3d} "
+      f"({round(H['anom']/H['submitted']*100,1)}%) · with a corrective action {H['actions']['with_action']:3d} "
+      f"({round(H['actions']['with_action']/H['anom']*100,1)}%)")
