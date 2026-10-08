@@ -1112,5 +1112,718 @@
    1,
    1
   ]
+ },
+ "hse": {
+  "submitted": 212,
+  "good": 128,
+  "anom": 84,
+  "daily": {
+   "good": [
+    4,
+    4,
+    3,
+    4,
+    1,
+    3,
+    5,
+    3,
+    6,
+    3,
+    4,
+    5,
+    3,
+    4,
+    9,
+    4,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    4,
+    4,
+    2,
+    2,
+    4,
+    6,
+    5,
+    6
+   ],
+   "anom": [
+    3,
+    2,
+    5,
+    2,
+    2,
+    2,
+    4,
+    2,
+    2,
+    3,
+    4,
+    2,
+    2,
+    4,
+    4,
+    3,
+    2,
+    3,
+    3,
+    1,
+    4,
+    3,
+    2,
+    5,
+    3,
+    2,
+    2,
+    3,
+    3,
+    2
+   ]
+  },
+  "entry": {
+   "during": 97,
+   "standalone": 115
+  },
+  "actions": {
+   "with_action": 61
+  },
+  "stopcard": {
+   "used": 37,
+   "daily": [
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "rules": [
+    {
+     "name": "Risky situations",
+     "anom": 26,
+     "stop": 7
+    },
+    {
+     "name": "PPE",
+     "anom": 21,
+     "stop": 4
+    },
+    {
+     "name": "Body Mechanics & Tools",
+     "anom": 18,
+     "stop": 7
+    },
+    {
+     "name": "Work permit",
+     "anom": 15,
+     "stop": 5
+    },
+    {
+     "name": "Traffic",
+     "anom": 14,
+     "stop": 6
+    },
+    {
+     "name": "Work at height",
+     "anom": 13,
+     "stop": 6
+    },
+    {
+     "name": "Lifting operations",
+     "anom": 11,
+     "stop": 3
+    },
+    {
+     "name": "Line of danger",
+     "anom": 10,
+     "stop": 6
+    },
+    {
+     "name": "Energized Systems",
+     "anom": 9,
+     "stop": 2
+    },
+    {
+     "name": "Confined spaces",
+     "anom": 8,
+     "stop": 3
+    },
+    {
+     "name": "Hot works",
+     "anom": 7,
+     "stop": 2
+    },
+    {
+     "name": "Excavation work",
+     "anom": 6,
+     "stop": 2
+    }
+   ],
+   "categories": [
+    {
+     "name": "Health",
+     "anom": 22,
+     "stop": 7
+    },
+    {
+     "name": "Safety",
+     "anom": 63,
+     "stop": 32
+    },
+    {
+     "name": "Security",
+     "anom": 19,
+     "stop": 7
+    },
+    {
+     "name": "Environment",
+     "anom": 16,
+     "stop": 5
+    }
+   ],
+   "companies": [
+    {
+     "name": "Company A",
+     "anom": 22,
+     "stop": 10
+    },
+    {
+     "name": "Company B",
+     "anom": 19,
+     "stop": 8
+    },
+    {
+     "name": "Company C",
+     "anom": 16,
+     "stop": 7
+    },
+    {
+     "name": "Company D",
+     "anom": 15,
+     "stop": 7
+    },
+    {
+     "name": "Company E",
+     "anom": 12,
+     "stop": 5
+    }
+   ],
+   "sites": [
+    {
+     "name": "Site 1 (Depot)",
+     "anom": 24,
+     "stop": 11
+    },
+    {
+     "name": "Site 2 (Terminal)",
+     "anom": 21,
+     "stop": 9
+    },
+    {
+     "name": "Site 3 (Plant)",
+     "anom": 22,
+     "stop": 10
+    },
+    {
+     "name": "Site 4 (Field)",
+     "anom": 17,
+     "stop": 7
+    }
+   ],
+   "workspaces": [
+    {
+     "name": "Workspace A",
+     "anom": 51,
+     "stop": 22
+    },
+    {
+     "name": "Workspace B",
+     "anom": 33,
+     "stop": 15
+    }
+   ],
+   "entry": {
+    "anom_during": 41,
+    "stop_during": 18
+   },
+   "actions": {
+    "stop_with_action": 29
+   }
+  },
+  "rules": [
+   {
+    "name": "Risky situations",
+    "anom": 26,
+    "situations": {
+     "rows": [
+      {
+       "name": "Smoking or vaping outside the authorised areas",
+       "anom": 7
+      },
+      {
+       "name": "Worker or driver under the influence of alcohol or drugs",
+       "anom": 6
+      },
+      {
+       "name": "Degraded situation left unsecured and unreported",
+       "anom": 5
+      },
+      {
+       "name": "Risks not identified before a non routine or complex operation",
+       "anom": 4
+      },
+      {
+       "name": "Start and stop instructions for equipment not followed",
+       "anom": 3
+      }
+     ],
+     "unspecified": 3,
+     "compliant": 4
+    }
+   },
+   {
+    "name": "PPE",
+    "anom": 21,
+    "situations": {
+     "rows": [
+      {
+       "name": "Helmet not worn in the required zone",
+       "anom": 7
+      },
+      {
+       "name": "Eye protection missing",
+       "anom": 6
+      },
+      {
+       "name": "Gloves not suited to the product handled",
+       "anom": 5
+      },
+      {
+       "name": "Hearing protection not worn",
+       "anom": 3
+      }
+     ],
+     "unspecified": 2,
+     "compliant": 3
+    }
+   },
+   {
+    "name": "Body Mechanics & Tools",
+    "anom": 18,
+    "situations": {
+     "rows": [
+      {
+       "name": "Manual handling beyond the allowed load",
+       "anom": 5
+      },
+      {
+       "name": "Tool not suited to the task",
+       "anom": 5
+      },
+      {
+       "name": "Damaged or modified tool kept in service",
+       "anom": 4
+      },
+      {
+       "name": "Working posture at risk",
+       "anom": 3
+      }
+     ],
+     "unspecified": 2,
+     "compliant": 3
+    }
+   },
+   {
+    "name": "Work permit",
+    "anom": 15,
+    "situations": {
+     "rows": [
+      {
+       "name": "Pre-job briefing not signed",
+       "anom": 5
+      },
+      {
+       "name": "Safety Green Light not done",
+       "anom": 5
+      },
+      {
+       "name": "No stop, risk reassessment or supervisor notification when conditions changed",
+       "anom": 4
+      }
+     ],
+     "unspecified": 2,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Traffic",
+    "anom": 14,
+    "situations": {
+     "rows": [
+      {
+       "name": "Vehicle condition not checked before use",
+       "anom": 2
+      },
+      {
+       "name": "Seatbelt not fastened",
+       "anom": 2
+      },
+      {
+       "name": "Speeding or driving unsuited to road conditions",
+       "anom": 2
+      },
+      {
+       "name": "Use of a communication device while driving",
+       "anom": 2
+      },
+      {
+       "name": "Driving time or journey management plan not respected",
+       "anom": 2
+      },
+      {
+       "name": "Pedestrian or cyclist traveling outside designated routes",
+       "anom": 2
+      },
+      {
+       "name": "Handrail not held when taking the stairs",
+       "anom": 2
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Work at height",
+    "anom": 13,
+    "situations": {
+     "rows": [
+      {
+       "name": "Harness not clipped",
+       "anom": 4
+      },
+      {
+       "name": "Guardrail missing or incomplete",
+       "anom": 4
+      },
+      {
+       "name": "Ladder used as a work platform",
+       "anom": 3
+      },
+      {
+       "name": "Tools not secured against dropping",
+       "anom": 2
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Lifting operations",
+    "anom": 11,
+    "situations": {
+     "rows": [
+      {
+       "name": "Load passing over people",
+       "anom": 3
+      },
+      {
+       "name": "Sling or accessory not checked",
+       "anom": 3
+      },
+      {
+       "name": "Exclusion zone not marked",
+       "anom": 2
+      },
+      {
+       "name": "Lifting plan missing",
+       "anom": 2
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Line of danger",
+    "anom": 10,
+    "situations": {
+     "rows": [
+      {
+       "name": "Positioned in the path of a pressure release",
+       "anom": 3
+      },
+      {
+       "name": "Positioned in the path of a dropped object",
+       "anom": 2
+      },
+      {
+       "name": "No safety barriers or exclusion zones",
+       "anom": 2
+      },
+      {
+       "name": "Loose objects not secured",
+       "anom": 1
+      },
+      {
+       "name": "No respect of safety barriers or exclusion zones",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Energized Systems",
+    "anom": 9,
+    "situations": {
+     "rows": [
+      {
+       "name": "Isolation not verified before work",
+       "anom": 3
+      },
+      {
+       "name": "Lock out tag out not applied",
+       "anom": 3
+      },
+      {
+       "name": "Stored energy not released",
+       "anom": 2
+      },
+      {
+       "name": "Live work without authorisation",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 1
+    }
+   },
+   {
+    "name": "Confined spaces",
+    "anom": 8,
+    "situations": {
+     "rows": [
+      {
+       "name": "No permit and/or confined-space entry certificate",
+       "anom": 1
+      },
+      {
+       "name": "No verification of isolation from energy and/or fluid sources",
+       "anom": 1
+      },
+      {
+       "name": "No respiratory protection when required",
+       "anom": 1
+      },
+      {
+       "name": "No rescue plan",
+       "anom": 1
+      },
+      {
+       "name": "Atmosphere not tested prior to intervention",
+       "anom": 1
+      },
+      {
+       "name": "No atmosphere monitoring",
+       "anom": 1
+      },
+      {
+       "name": "No entry/exit supervision",
+       "anom": 1
+      },
+      {
+       "name": "Unauthorized entry",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 1
+    }
+   },
+   {
+    "name": "Hot works",
+    "anom": 7,
+    "situations": {
+     "rows": [
+      {
+       "name": "No hot work permit",
+       "anom": 2
+      },
+      {
+       "name": "Flammable substance or ignition source nearby",
+       "anom": 1
+      },
+      {
+       "name": "No written authorization before starting hot work",
+       "anom": 1
+      },
+      {
+       "name": "Gas test not performed in the hazardous area",
+       "anom": 1
+      },
+      {
+       "name": "No continuous gas monitoring in the hazardous area",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 1
+    }
+   },
+   {
+    "name": "Excavation work",
+    "anom": 6,
+    "situations": {
+     "rows": [
+      {
+       "name": "No safe access when the excavation is deeper than 1.3 m (4 ft)",
+       "anom": 2
+      },
+      {
+       "name": "No shoring or sloping of the walls",
+       "anom": 1
+      },
+      {
+       "name": "Underground networks not located before digging",
+       "anom": 1
+      },
+      {
+       "name": "Spoil stored at the edge of the excavation",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 1
+    }
+   }
+  ],
+  "categories": [
+   {
+    "name": "Health",
+    "good": 41,
+    "anom": 22,
+    "total": 63
+   },
+   {
+    "name": "Safety",
+    "good": 96,
+    "anom": 63,
+    "total": 159
+   },
+   {
+    "name": "Security",
+    "good": 33,
+    "anom": 19,
+    "total": 52
+   },
+   {
+    "name": "Environment",
+    "good": 28,
+    "anom": 16,
+    "total": 44
+   }
+  ],
+  "companies": [
+   {
+    "name": "Company A",
+    "good": 38,
+    "anom": 22,
+    "total": 60
+   },
+   {
+    "name": "Company B",
+    "good": 29,
+    "anom": 19,
+    "total": 48
+   },
+   {
+    "name": "Company C",
+    "good": 27,
+    "anom": 16,
+    "total": 43
+   },
+   {
+    "name": "Company D",
+    "good": 23,
+    "anom": 15,
+    "total": 38
+   },
+   {
+    "name": "Company E",
+    "good": 11,
+    "anom": 12,
+    "total": 23
+   }
+  ],
+  "sites": [
+   {
+    "name": "Site 1 (Depot)",
+    "good": 41,
+    "anom": 24,
+    "total": 65
+   },
+   {
+    "name": "Site 2 (Terminal)",
+    "good": 34,
+    "anom": 21,
+    "total": 55
+   },
+   {
+    "name": "Site 3 (Plant)",
+    "good": 30,
+    "anom": 22,
+    "total": 52
+   },
+   {
+    "name": "Site 4 (Field)",
+    "good": 23,
+    "anom": 17,
+    "total": 40
+   }
+  ],
+  "workspaces": [
+   {
+    "name": "Workspace A",
+    "good": 86,
+    "anom": 51,
+    "total": 137
+   },
+   {
+    "name": "Workspace B",
+    "good": 42,
+    "anom": 33,
+    "total": 75
+   }
+  ]
  }
 }
