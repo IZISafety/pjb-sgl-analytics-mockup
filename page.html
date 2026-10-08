@@ -6,8 +6,16 @@
     --ink:#222c31; --ink-2:#3b4c55; --ink-3:#607d8b;
     --line:#eaeef1; --line-2:#f2f5f6;
     --brand:#004196; --brand-soft:#e6ecf5; --blue-100:#f6fafe;
-    --go:#0E7C5A; --gac:#6AA22B; --gac-2:#4E7A1E; --stop:#C81E1E;
-    --cat1:#2563EB; --cat2:#0284C7; --cat2b:#075985; --cat3:#78909C;
+    --go:#1C9C5C; --go-ink:#157544; --gac:#32CD32; --gac-2:#1A7A1A;
+    --stop:#FF1515; --stop-ink:#B3050A;  /* the alarm red for fills, its dense version for text */
+    --cat1:#2563EB; --cat2:#0284C7; --cat2b:#075985; --cat3:#968F85;  /* a paper grey, warm rather than slate */
+    --obs-good:#6C20DF; --obs-anom:#FF6700;  /* HSE Observation: cool violet good practice, safety orange anomaly */
+    --hatch:#E4FDFF;                        /* the hatching white, cooled so it cuts the orange */
+    --obs-anom-ink:#C44F00;                 /* the same orange, darkened for text on white */
+    /* the four HSE categories: one colour per ring at four densities, as if the same ink
+       were laid thinner. Safety carries it at full strength, 74%, 56% and 40% follow */
+    --cat-safety:#6C20DF; --cat-health:#925AE7; --cat-security:#AD82ED; --cat-env:#C4A6F2;
+    --cata-safety:#FF6700; --cata-health:#FF8F42; --cata-security:#FFAA70; --cata-env:#FFC299;
     --new-bg:#e6ecf5; --new-ink:#004196;
     --warn-bg:#fff7e8; --warn-ink:#8a5209; --warn-line:#f0dcae;
   }
@@ -65,20 +73,39 @@
   .panel{padding:16px 18px 18px; display:flex; flex-direction:column; gap:12px; min-width:0}
   .panel-head{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px}
   .panel-head h3{font-size:15px; font-weight:650}
-  .panel-sub{font-size:12.5px; color:var(--ink-2); max-width:88ch}
+  /* the subtitle belongs to the title, not to the controls under it: pulled up against
+     the heading and given air before the filters */
+  .panel-sub{font-size:12.5px; color:var(--ink-2); max-width:88ch;
+             margin-top:-5px; margin-bottom:7px}
 
-  .tiles{display:flex; flex-wrap:wrap; gap:12px 30px}
+  .tiles{display:flex; flex-wrap:wrap; gap:12px 30px; align-items:flex-start}
   .tile{min-width:88px; max-width:250px}
-  .tile .v{font-size:27px; font-weight:650; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.15}
+  /* a fixed box, so a tile with a swatch and a tile without still line their labels up */
+  .tile .v{font-size:27px; font-weight:650; letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+           line-height:1.15; display:flex; align-items:center; gap:7px; height:32px}
   .tile .l{font-size:12px; color:var(--ink-2); margin-top:1px}
-  .tile.go .v{color:var(--go)} .tile.gac .v{color:var(--gac)} .tile.stop .v{color:var(--stop)}
+  /* a tile that is also the key of its series: the swatch sits against the figure it
+     colours, so the chart needs no legend row of its own */
+  button.tile{border:0; background:none; font-family:inherit; text-align:left;
+              padding:0; cursor:pointer; color:inherit}
+  button.tile:focus-visible{outline:2px solid var(--brand); outline-offset:3px; border-radius:3px}
+  .tile .v .sw{width:12px; height:12px; opacity:1}
+  button.tile[aria-pressed="false"]{opacity:.42}
+  button.tile[aria-pressed="false"] .v{text-decoration:line-through}
+  button.tile[aria-pressed="false"] .v .sw{background:var(--surface)!important;
+               box-shadow:inset 0 0 0 1.5px var(--ink-3)}
+  /* a tile that counts a part of the tile before it, so it is written a size down */
+  /* a tile that counts a part of the tile before it: same line, one size down */
+  .tile.sub .v{font-size:19px}
+  .tile.sub .v .sw{width:10px; height:10px}
+  /* the tile figures stay in the ordinary ink, the label under each one names what it counts */
 
   .chart{width:100%; overflow:hidden}
   .chart svg{display:block; width:100%; height:auto}
 
   .keys{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; color:var(--ink-2)}
   .key{display:flex; align-items:center; gap:6px}
-  .sw{width:11px; height:11px; border-radius:2px; flex:none}
+  .sw{width:11px; height:11px; border-radius:2px; flex:none; opacity:.9}
   .sw.go{background:var(--go)} .sw.gac{background:var(--gac)} .sw.stop{background:var(--stop)}
   button.key{border:0; background:none; font-family:inherit; font-size:12.5px; color:var(--ink-2);
              padding:2px 0; cursor:pointer}
@@ -86,7 +113,16 @@
   button.key[aria-pressed="false"] .sw{background:var(--surface)!important; box-shadow:inset 0 0 0 1.5px var(--ink-3)}
   button.key:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
 
+  /* the marks carry a touch of transparency, so a colour sits on the page rather than
+     on top of it. The rings keep a little more body, their figures are written in white
+     inside the slice and would lose contrast. */
+  .chart svg rect, .chart svg circle{ fill-opacity:.88 }
+  .chart svg path{ fill-opacity:.92 }
+  .chart svg polyline{ stroke-opacity:.9 }
   .dlist{display:flex; flex-direction:column; gap:7px}
+  /* the two category lists sit under their own ring rather than spanning the half,
+     so a name never ends up next to the other ring's figures */
+  #h-cats-good-list, #h-cats-anom-list{max-width:330px; margin:10px auto 0}
   .ringbox{display:flex; flex-direction:column; gap:10px}
   .rings{gap:0}
   .rings .ringbox{padding:0 26px}
@@ -102,6 +138,21 @@
   .drow .nm{color:var(--ink-2); flex:1 1 auto; min-width:0}
   .drow .vl{font-variant-numeric:tabular-nums; font-weight:650}
   .drow .pc{font-variant-numeric:tabular-nums; color:var(--ink-3); width:52px; text-align:right}
+  .mask{position:fixed; inset:0; background:rgba(20,30,36,.42); display:flex; align-items:center;
+        justify-content:center; padding:18px; z-index:120}
+  .modal{background:var(--surface); border-radius:10px; box-shadow:0 18px 50px rgba(0,0,0,.26);
+         width:min(560px,100%); max-height:86vh; overflow:auto; padding:18px 20px 16px}
+  .modal h4{margin:0 0 2px; font-size:16px; color:var(--ink)}
+  .modal .sub{margin:0 0 14px; font-size:12.5px; color:var(--ink-3)}
+  .modal .x{position:absolute; top:12px; right:14px; border:1px solid var(--line); background:var(--surface);
+            border-radius:6px; width:28px; height:28px; font-size:15px; color:var(--ink-2); cursor:pointer}
+  .modal .wrap{position:relative}
+  .srow{display:flex; align-items:baseline; gap:10px; padding:7px 0; border-top:1px solid var(--line-2);
+        font-size:13px; color:var(--ink-2)}
+  .srow .nm{flex:1 1 auto}
+  .srow .vl{font-variant-numeric:tabular-nums; font-weight:650; color:var(--ink)}
+  .srow .pc{font-variant-numeric:tabular-nums; color:var(--ink-3); width:52px; text-align:right}
+  .srow.quiet .nm, .srow.quiet .vl{color:var(--ink-3); font-weight:400}
 
   /* funnel */
   .funnel{display:flex; flex-direction:column; gap:10px}
@@ -143,8 +194,8 @@
   .ev .split i:last-child{border-right:0}
   .ev .quote{font-size:12.5px; color:var(--ink-3); line-height:1.45; font-style:italic}
   .ev .act{font-size:13px; color:var(--ink-2); line-height:1.45; display:flex; gap:8px; align-items:flex-start}
-  .ev .act .glyph{color:var(--go); font-weight:700; flex:none; line-height:1.45}
-  .ev .none{font-size:13px; color:var(--stop); font-weight:600; display:flex; gap:8px; align-items:flex-start}
+  .ev .act .glyph{color:var(--go-ink); font-weight:700; flex:none; line-height:1.45}
+  .ev .none{font-size:13px; color:var(--stop-ink); font-weight:600; display:flex; gap:8px; align-items:flex-start}
   .ev .none .glyph{flex:none; font-weight:700}
   .ev .foot{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:auto; padding-top:2px}
   .ev[role="link"]{cursor:pointer; transition:border-color .12s, box-shadow .12s}
@@ -182,6 +233,12 @@
     .chain .arrow::before{top:50%; bottom:auto; left:0; right:0; width:auto; height:1px}
     .chain .arrow span{transform:rotate(90deg); padding:0 7px}
   }
+  .typepick{margin-left:auto; display:inline-flex; align-items:center; gap:8px;
+           font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+  .typepick select{font-family:inherit; font-size:13px; letter-spacing:0; text-transform:none;
+                   color:var(--brand); font-weight:600; background:var(--surface);
+                   border:1px solid var(--brand); border-radius:6px; padding:5px 10px; cursor:pointer}
+  .typepick select:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
   .kpichips{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
   .kpichip{display:inline-flex; align-items:center; gap:9px; font-size:13px;
            border:1px solid #dbe3ea; border-radius:999px; padding:7px 13px 7px 15px;
@@ -214,7 +271,7 @@
   tbody tr:last-child td{border-bottom:0}
   .chip{display:inline-block; padding:2px 8px; border-radius:11px; font-size:11.5px; font-weight:600; white-space:nowrap}
   .chip.gac{background:rgba(106,162,43,.14); color:var(--gac-2)}
-  .chip.stop{background:rgba(200,30,30,.10); color:var(--stop)}
+  .chip.stop{background:rgba(255,21,21,.10); color:var(--stop-ink)}
   .chip.ok{background:var(--surface-2); color:var(--ink-3)}
   .chip.bad{background:var(--warn-bg); color:var(--warn-ink)}
   .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--ink-3); margin-right:5px}
@@ -236,6 +293,7 @@
       <div class="tab">Work permit</div>
       <div class="tab">Compliance in intervention</div>
       <button type="button" class="tab active" data-view="pjb">PJB &amp; SGL <span class="pill">New</span></button>
+      <button type="button" class="tab" data-view="hse">HSE Observation <span class="pill">New</span></button>
       <button type="button" class="tab" data-view="cross">Cross data</button>
     </nav>
   </div>
@@ -257,8 +315,8 @@
   <!-- 1 · forms and outcome over the period -->
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Number of forms</h3></div>
-      <p class="panel-sub">How many forms were submitted over the period, and how they ended. The tiles give the totals, the bars break the same figures down by day so a quiet week or a spike shows up.</p>
+      <div class="panel-head"><h3>Number of forms</h3><label class="typepick">Type <select id="pick-daily"><option value="bars" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="line">Lines</option><option value="area">Stacked areas</option></select></label></div>
+      <p class="panel-sub">How many forms were submitted over the period, and how they ended.</p>
       <div class="controls">
         <div class="seg" id="seg-vol" role="group" aria-label="Measure">
           <button type="button" data-v="volume" aria-pressed="true">By volume</button>
@@ -358,7 +416,7 @@
   <!-- 5 · comparison -->
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Comparison of results</h3></div>
+      <div class="panel-head"><h3>Comparison of results</h3><label class="typepick">Type <select id="pick-cmp"><option value="stacked" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="table">Table</option></select></label></div>
       <p class="panel-sub">How the outcomes break down across companies, sites and workspaces.</p>
       <div class="controls">
         <div class="seg" id="seg-dim" role="group" aria-label="Dimension">
@@ -391,6 +449,79 @@
 
   </div>
 
+  <!-- 3 · HSE Observation -->
+  <div class="view view-hse" hidden>
+
+  <div class="grid">
+    <section class="card panel">
+      <div class="panel-head"><h3>Number of observations</h3><label class="typepick">Type <select id="pick-h-daily"><option value="bars" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="line">Lines</option><option value="area">Stacked areas</option></select></label></div>
+      <p class="panel-sub">Every HSE observation submitted over the period, split between good practice and anomaly. Click a figure below to filter the chart.</p>
+      <div class="controls">
+        <div class="seg" id="h-seg-vol" role="group" aria-label="Measure">
+          <button type="button" data-v="volume" aria-pressed="true">By volume</button>
+          <button type="button" data-v="percentage" aria-pressed="false">By percentage</button>
+        </div>
+      </div>
+      <div class="tiles" id="h-banner" role="group" aria-label="Show or hide a kind of observation"></div>
+      <div class="chart" id="h-daily" data-h="250"></div>
+      <p class="footnote" id="h-daily-note"></p>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card panel">
+      <h3>Observations by category</h3>
+      <p class="panel-sub">Health, Safety, Security and Environment, on one ring for the good practice and one for the anomalies.</p>
+      <div class="grid two" style="margin-bottom:0">
+        <div>
+          <h4 class="ring-h">Good practice</h4>
+          <div class="chart" id="h-cats-good" data-h="290"></div>
+          <div class="dlist" id="h-cats-good-list"></div>
+        </div>
+        <div>
+          <h4 class="ring-h">Anomaly</h4>
+          <div class="chart" id="h-cats-anom" data-h="290"></div>
+          <div class="dlist" id="h-cats-anom-list"></div>
+        </div>
+      </div>
+      <p class="footnote" id="h-cats-note"></p>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card panel">
+      <div class="panel-head"><h3>Anomalies by Golden rules</h3></div>
+      <p class="panel-sub">A bar counts the anomalies that ticked the rule, including those where the rule was found compliant. Click on the bar for more details. A good practice carries no golden rule.</p>
+      <div class="chart" id="h-rules"></div>
+      <div class="keys" id="h-rules-keys"></div>
+      <p class="footnote" id="h-rules-note"></p>
+    </section>
+  </div>
+
+
+  <div class="grid">
+    <section class="card panel">
+      <div class="panel-head"><h3>Comparison of results</h3><label class="typepick">Type <select id="pick-h-cmp"><option value="stacked" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="table">Table</option></select></label></div>
+      <p class="panel-sub">How observations break down across companies, sites, workspaces and categories.</p>
+      <div class="controls">
+        <div class="seg" id="h-seg-dim" role="group" aria-label="Dimension">
+          <button type="button" data-v="companies" aria-pressed="true">By company</button>
+          <button type="button" data-v="sites" aria-pressed="false">By site</button>
+          <button type="button" data-v="workspaces" aria-pressed="false">By workspace</button>
+        </div>
+        <div class="seg" id="h-seg-msr" role="group" aria-label="Measure">
+          <button type="button" data-v="volume" aria-pressed="true">By volume</button>
+          <button type="button" data-v="percentage" aria-pressed="false">By percentage</button>
+        </div>
+      </div>
+      <div class="chart" id="h-compare" data-h="280"></div>
+      <div class="keys" id="h-cmp-keys" role="group" aria-label="Show or hide a kind of observation"></div>
+      <p class="footnote" id="h-cmp-note"></p>
+    </section>
+  </div>
+
+  </div>
+
   <!-- 6 · cross data (kept as it is) -->
   <div class="view view-cross" hidden>
   <div class="grid">
@@ -405,6 +536,7 @@
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#6B4E9E"></i><span>Interventions</span><i class="box">✓</i></button>
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#004196"></i><span>PJB &amp; SGL</span><span class="pill">New</span><i class="box">✓</i></button>
         <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#E0A82E"></i><span>Life saving checks</span><i class="box">✓</i></button>
+        <button type="button" class="kpichip" aria-pressed="false"><i class="dot" style="background:#FF6700"></i><span>HSE Observation</span><span class="pill">New</span><i class="box">✓</i></button>
         <button type="button" class="kpichip old" aria-pressed="false"><i class="dot" style="background:#94a3b8"></i><span>Prejob briefing</span><span class="pill keep">Old</span><i class="box">✓</i></button>
         <button type="button" class="kpichip old on" aria-pressed="true"><i class="dot" style="background:#0E7C5A"></i><span>Safety green light</span><span class="pill keep">Old</span><i class="box">✓</i></button>
       </div>
@@ -416,9 +548,10 @@
       <div class="chart" id="c-x-vol" data-h="220"></div>
 
       <h4 class="ring-h" style="margin-top:10px">Non-compliant submissions per KPI</h4>
-      <p class="footnote">Count and rate for each selected KPI. What counts as non-compliant depends on the KPI: for life saving checks and the work permit it is the non-compliant forms, for PJB &amp; SGL it is the forms that ended in a STOP.</p>
+      <p class="footnote">Count and rate for each selected KPI that asks a compliance question. What counts as non-compliant depends on the KPI: for life saving checks and the work permit it is the non-compliant forms, for PJB &amp; SGL it is the forms that ended in a STOP.</p>
       <div class="tiles" id="t-x-nc"></div>
       <div class="chart" id="c-x-nc" data-h="200"></div>
+      <p class="footnote" id="n-x-nc"></p>
 
       <h4 class="ring-h" style="margin-top:10px">Cross-KPI monthly volumes</h4>
       <p class="footnote">Grouped bars per month over the rolling year.</p>
@@ -446,7 +579,7 @@
   </div>
   </div>
 
-  <p class="footnote view view-pjb" style="display:none">Status colours are <strong>#0E7C5A</strong> / <strong>#6AA22B</strong> / <strong>#C81E1E</strong> rather than the app's UI green, amber and red. GO and GO <em>corrected</em> are two greens because both mean the work started, and they were picked far enough apart to stay separable under red-green colour blindness. Every chart also carries a written label or a value table.</p>
+  <p class="footnote view view-pjb" style="display:none">Status colours are <strong>#1C9C5C</strong> / <strong>#32CD32</strong> / <strong>#FF1515</strong> rather than the app's UI green, amber and red. GO and GO <em>corrected</em> are two greens because both mean the work started, and they were picked far enough apart to stay separable under red-green colour blindness. Every chart also carries a written label or a value table.</p>
 </div>
 
 <script>
@@ -457,16 +590,34 @@
   var pct = function(a,b){ return b ? Math.round(a/b*1000)/10 : 0; };
   var fmt = function(n){ return n.toLocaleString('en-GB'); };
   var esc = function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+  /* white text only works on a dark enough fill, so the label picks its own colour */
+  function lum(hex){
+    hex = String(hex).trim().replace('#', '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    var v = [0, 2, 4].map(function(i){
+      var c = parseInt(hex.substr(i, 2), 16) / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  function onColour(bg){ return lum(bg) > 0.25 ? '#1f2a30' : '#fff'; }
   var NS = 'http://www.w3.org/2000/svg';
   var mode = 'all', dim = 'companies', msr = 'volume', vol = 'volume';
   var cmpShow = { go:true, gac:true, stop:true };
   var permitShow = { epermit:true, paper:true };
+  var dailyType = 'bars', cmpType = 'stacked';
   var show = { go:true, gac:true, stop:true };
   var C = {};
   function tokens(){
     C = { go:css('--go'), gac:css('--gac'), gac2:css('--gac-2'), stop:css('--stop'), cat1:css('--cat1'), cat2:css('--cat2'), cat2b:css('--cat2b'), cat3:css('--cat3'),
+          good:css('--obs-good'), anom:css('--obs-anom'), anomInk:css('--obs-anom-ink'),
+          catHealth:css('--cat-health'), catSafety:css('--cat-safety'),
+          catSecurity:css('--cat-security'), catEnv:css('--cat-env'),
+          catAHealth:css('--cata-health'), catASafety:css('--cata-safety'),
+          catASecurity:css('--cata-security'), catAEnv:css('--cata-env'),
           ink:css('--ink'), ink2:css('--ink-2'), ink3:css('--ink-3'), line:css('--line'), line2:css('--line-2'),
-          surface:css('--surface'), brand:css('--brand'), warn:css('--warn-ink') };
+          surface:css('--surface'), hatch:css('--hatch'),
+          brand:css('--brand'), warn:css('--warn-ink') };
   }
   tokens();
 
@@ -475,6 +626,20 @@
     'background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:5px;' +
     'padding:6px 9px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.14);max-width:280px';
   document.body.appendChild(tip);
+  function openModal(title, sub, bodyHtml){
+    var mask = document.createElement('div');
+    mask.className = 'mask';
+    mask.innerHTML = '<div class="modal" role="dialog" aria-modal="true" aria-label="' + esc(title) + '">' +
+      '<div class="wrap"><button type="button" class="x" aria-label="Close">\u00d7</button>' +
+      '<h4>' + esc(title) + '</h4><p class="sub">' + sub + '</p>' + bodyHtml + '</div></div>';
+    function shut(){ mask.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e){ if (e.key === 'Escape') shut(); }
+    mask.addEventListener('click', function(e){ if (e.target === mask) shut(); });
+    mask.querySelector('.x').addEventListener('click', shut);
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(mask);
+    mask.querySelector('.x').focus();
+  }
   function bindTip(node, html){
     function move(e){
       var x = e.clientX + 14, y = e.clientY + 16, w = tip.offsetWidth, h = tip.offsetHeight;
@@ -507,6 +672,12 @@
     while (v < max - 1e-9){ out.push(Math.round(v * 1000) / 1000); v += step; }
     out.push(Math.round(v * 1000) / 1000); return out;
   }
+  /* the extra line of a tooltip, asked per series so a line that only makes sense on one
+     kind, the Stop Card for instance, never appears under another one */
+  function tipx(cfg, i, si, s){
+    var x = cfg.tipExtra ? cfg.tipExtra(i, si, s) : '';
+    return x ? '<br>' + esc(x).replace(/\n/g, '<br>') : '';
+  }
   function columns(box, cfg){
     if (!box) return;
     var W = box.clientWidth || 600, H = +box.dataset.h || 220;
@@ -526,6 +697,17 @@
     var band = pw / cfg.categories.length, bw = Math.max(4, Math.min(46, band * 0.62));
     var nS = cfg.series.length, gw = cfg.grouped ? Math.max(3, (bw + 10) / nS - 2) : bw;
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
+    /* the stripes that mark a part of a bar, defined once per chart so the id stays its own */
+    var hid = 'hx-' + (box.id || 'c');
+    if (cfg.inset){
+      var defs = el('defs', {});
+      var pat = el('pattern', { id:hid, width:10, height:10,
+                                patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+                                   stroke:cfg.inset.hatch || cfg.inset.color,
+                                   'stroke-width':4.6 }));
+      defs.appendChild(pat); svg.appendChild(defs);
+    }
     tk.forEach(function(t){
       var y = mT + ph - (t / max) * ph;
       svg.appendChild(el('line', { x1:mL, x2:W - mR, y1:y, y2:y, stroke:C.line2, 'stroke-width':1 }));
@@ -542,9 +724,29 @@
           : cx - bw / 2;
         var r = el('rect', { x:x, y:y, width:cfg.grouped ? gw : bw,
                              height:Math.max(1, h - (!cfg.grouped && cfg.series.length > 1 ? 2 : 0)),
-                             fill:(s.colors ? s.colors[i] : s.color), rx:2 });
-        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' + esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>');
-        svg.appendChild(r); acc += v;
+                             fill:(s.colors ? s.colors[i] : s.color), rx:4 });
+        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' + esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>' +
+                   tipx(cfg, i, si, s));
+        svg.appendChild(r);
+        /* a subset of this column, hatched over the bar itself rather than drawn beside it,
+           because it is already counted in the value and must never be read as something to
+           add to it. Full width, so the hatching marks a part of the bar, not a second bar. */
+        if (cfg.inset && cfg.inset.series === si && cfg.inset.data[i]){
+          var cw = cfg.grouped ? gw : bw;
+          /* the gap the stacked segment gives back at its foot: the hatching takes the same
+             one, so it lands on the segment's foot and can never run past the segment itself,
+             not even on a day where every anomaly carries a Stop Card */
+          var gp = (!cfg.grouped && cfg.series.length > 1) ? 2 : 0;
+          var ih = Math.min((cfg.inset.data[i] / max) * ph, Math.max(1, h - gp));
+          var base = cfg.grouped ? mT + ph : mT + ph - (acc / max) * ph - gp;
+          var ir = el('rect', { x:x, y:base - ih, width:cw,
+                                height:Math.max(1, ih), fill:'url(#' + hid + ')', rx:4,
+                                'fill-opacity':1 });
+          bindTip(ir, '<strong>' + esc(cat) + '</strong><br>' + esc(cfg.inset.name) + ': <b>' +
+                      cfg.inset.data[i] + (cfg.suffix || '') + '</b> of ' + v + (cfg.suffix || ''));
+          svg.appendChild(ir);
+        }
+        acc += v;
       });
       if (cfg.valueLabels && totals[i] && !cfg.grouped)
         svg.appendChild(txt(cx, mT + ph - (totals[i] / max) * ph - 6, totals[i] + (cfg.suffix || ''),
@@ -566,29 +768,86 @@
     var labelW = Math.min(Math.max(84, W * 0.36), 240);
     var lines = cfg.categories.map(function(c){ return wrapText(c, Math.floor(labelW / 6.1)); });
     var gap = 13;
-    var rows = cfg.categories.map(function(_, i){ return Math.max(cfg.rowH || 32, lines[i].length * 14 + 12); });
+    var minRow = (cfg.rowH || 32) * (cfg.grouped ? 1.35 : 1);
+    var rows = cfg.categories.map(function(_, i){ return Math.max(minRow, lines[i].length * 14 + 12); });
     var H = rows.reduce(function(a, b){ return a + b + gap; }, 0) + 16;
     var mL = labelW + 10, mR = cfg.mRight || 56, mT = 6;
     var totals = cfg.categories.map(function(_, i){
       return cfg.series.reduce(function(a, s){ return a + s.data[i]; }, 0); });
-    var max = cfg.max != null ? cfg.max : Math.max.apply(null, totals.concat([1]));
+    var peaks = cfg.categories.map(function(_, i){
+      return cfg.series.reduce(function(a, s){ return Math.max(a, s.data[i]); }, 0); });
+    var max = cfg.max != null ? cfg.max
+            : Math.max.apply(null, (cfg.grouped ? peaks : totals).concat([1]));
     var pw = Math.max(40, W - mL - mR);
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
+    /* the stripes that mark a part of a bar, defined once per chart so the id stays its own */
+    var hid = 'hx-' + (box.id || 'b');
+    if (cfg.inset){
+      var defs = el('defs', {});
+      var pat = el('pattern', { id:hid, width:10, height:10,
+                                patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+                                   stroke:cfg.inset.hatch || cfg.inset.color,
+                                   'stroke-width':4.6 }));
+      defs.appendChild(pat); svg.appendChild(defs);
+    }
+    var nS = cfg.series.length, grouped = !!cfg.grouped;
     var y = mT;
     cfg.categories.forEach(function(cat, i){
       var h = rows[i], bh = Math.min(26, h - 6), by = y + (h - bh) / 2, acc = 0;
+      var gh = grouped ? Math.max(5, (bh - 2 * (nS - 1)) / nS) : bh;
+      if (cfg.onPick){
+        var hit = el('rect', { x:0, y:y, width:W, height:h, fill:'transparent',
+                               style:'cursor:pointer', role:'button', tabindex:'0',
+                               'aria-label':cat + ', open the detail' });
+        hit.addEventListener('click', function(){ cfg.onPick(i); });
+        hit.addEventListener('keydown', function(e){
+          if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); cfg.onPick(i); } });
+        svg.appendChild(hit);
+      }
       lines[i].forEach(function(ln, k){
         svg.appendChild(txt(labelW, y + (h - lines[i].length * 14) / 2 + 11 + k * 14, ln,
                             { anchor:'end', fill:C.ink2, size:12 })); });
-      cfg.series.forEach(function(s){
+      cfg.series.forEach(function(s, si){
         var v = s.data[i]; if (!v){ acc += v; return; }
-        var w = (v / max) * pw, x = mL + (acc / max) * pw;
-        var r = el('rect', { x:x, y:by, width:Math.max(1, w - (cfg.series.length > 1 ? 2 : 0)),
-                             height:bh, fill:(s.colors ? s.colors[i] : s.color), rx:2 });
-        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' + esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>');
-        svg.appendChild(r); acc += v;
+        var w = (v / max) * pw;
+        var x = grouped ? mL : mL + (acc / max) * pw;
+        var ry = grouped ? by + si * (gh + 2) : by;
+        var r = el('rect', { x:x, y:ry, width:Math.max(1, w - (!grouped && nS > 1 ? 2 : 0)),
+                             height:grouped ? gh : bh, fill:(s.colors ? s.colors[i] : s.color), rx:4 });
+        if (cfg.onPick){ r.setAttribute('style', 'cursor:pointer');
+          r.addEventListener('click', function(){ cfg.onPick(i); }); }
+        /* tipBody writes the whole body when a row needs its own wording rather than the
+           series name and its value */
+        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' +
+                   (cfg.tipBody ? cfg.tipBody(i)
+                                : esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>' +
+                                  tipx(cfg, i, si, s)));
+        svg.appendChild(r);
+        /* a subset of the bar, hatched over the bar itself rather than drawn beside it,
+           because it is contained in the value and must never be read as something to add
+           to it. Full height, so the hatching marks a part of the bar, not a second bar. */
+        if (cfg.inset && cfg.inset.data[i]){
+          /* capped at the bar's own drawn width, so a rule where every anomaly carries a
+             Stop Card is hatched end to end and never runs past its own orange */
+          var gp = (!grouped && nS > 1) ? 2 : 0;
+          var iw = Math.min((cfg.inset.data[i] / max) * pw, Math.max(1, w - gp));
+          var ir = el('rect', { x:mL, y:by, width:Math.max(1, iw), height:bh,
+                                fill:'url(#' + hid + ')', rx:4, 'fill-opacity':1 });
+          bindTip(ir, '<strong>' + esc(cat) + '</strong><br>' +
+                      (cfg.tipBody ? cfg.tipBody(i)
+                                   : esc(cfg.inset.name) + ': <b>' + cfg.inset.data[i] +
+                                     '</b> of ' + v));
+          if (cfg.onPick){ ir.setAttribute('style', 'cursor:pointer');
+            ir.addEventListener('click', function(){ cfg.onPick(i); }); }
+          svg.appendChild(ir);
+        }
+        acc += v;
+        if (grouped && cfg.valueLabels)
+          svg.appendChild(txt(mL + w + 6, ry + gh / 2 + 4, v + (cfg.suffix || ''),
+                              { fill:C.ink3, weight:600, size:11 }));
       });
-      if (cfg.valueLabels)
+      if (cfg.valueLabels && !grouped)
         svg.appendChild(txt(mL + (totals[i] / max) * pw + 7, by + bh / 2 + 4,
                             cfg.labelFn ? cfg.labelFn(i) : totals[i] + (cfg.suffix || ''),
                             { fill:C.ink2, weight:600, size:11.5 }));
@@ -596,7 +855,7 @@
     });
     box.innerHTML = ''; box.appendChild(svg);
   }
-  function donut(box, listBox, slices){
+  function donut(box, listBox, slices, unit, picked, hidePct, bullets){
     if (!box) return;
     var W = box.clientWidth || 300, H = +box.dataset.h || 220;
     var total = slices.reduce(function(a, s){ return a + s.v; }, 0);
@@ -612,30 +871,145 @@
         'L', cx + r * Math.cos(a1), cy + r * Math.sin(a1),
         'A', r, r, 0, big, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), 'Z'].join(' '),
         fill:s.c, stroke:C.surface, 'stroke-width':3 });
-      bindTip(p, '<strong>' + esc(s.n) + '</strong><br><b>' + fmt(s.v) + '</b> · ' + pct(s.v, total) + '%' +
-                 (s.d ? '<br>' + esc(s.d) : ''));
+      /* picked can be a phrase, so the tooltip says what the percentage is a share of
+         instead of leaving the reader to guess the base */
+      /* picked names what is counted; hidePct drops the ring share when the slice already
+         carries it in writing, so the same percentage is never said twice; bullets puts one
+         figure per line, since three measures run together read as one sentence */
+      var mk = (bullets && s.d) ? '\u2022\u2002' : '';   // one line alone is not a list
+      /* picked can be a word, or a function of the slice when the line has to carry that
+         slice's own figures */
+      var word = typeof picked === 'function' ? picked(s)
+               : (typeof picked === 'string' ? picked : (picked ? 'selected' : ''));
+      bindTip(p, '<strong>' + esc(s.n) + '</strong><br>' + mk +
+                 '<b>' + fmt(s.v) + '</b>' + (word ? ' ' + esc(word) : '') +
+                 (hidePct ? '' : ' · ' + pct(s.v, total) + '%') +
+                 (s.d ? '<br>' + mk + esc(s.d).replace(/\n/g, '<br>' + mk) : ''));
       svg.appendChild(p);
       var mid = (a0 + a1) / 2;
-      if (s.v / total > 0.09){
+      /* the label goes inside the ring only when it actually fits there: the band is
+         (R - r) thick, and a label sitting left or right of the centre has to fit
+         across that thickness, so a wide label on a flat angle goes outside instead */
+      var label = pct(s.v, total) + '%';
+      var fits = label.length * 6.7 * Math.abs(Math.cos(mid)) + 6 <= (R - r);
+      if (s.v / total > 0.09 && fits){
         var lr = (R + r) / 2;
-        svg.appendChild(txt(cx + lr * Math.cos(mid), cy + lr * Math.sin(mid) + 4, pct(s.v, total) + '%',
-                            { anchor:'middle', fill:'#fff', weight:700, size:12 }));
+        svg.appendChild(txt(cx + lr * Math.cos(mid), cy + lr * Math.sin(mid) + 4, label,
+                            { anchor:'middle', fill:onColour(s.c), weight:700, size:12 }));
       } else {
         var ox = cx + (R + 13) * Math.cos(mid), oy = cy + (R + 13) * Math.sin(mid) + 4;
-        svg.appendChild(txt(ox, oy, pct(s.v, total) + '%',
+        svg.appendChild(txt(ox, oy, label,
                             { anchor:Math.cos(mid) < -0.2 ? 'end' : (Math.cos(mid) > 0.2 ? 'start' : 'middle'),
                               fill:C.ink2, weight:650, size:11.5 }));
       }
       a0 = a1;
     });
-    svg.appendChild(txt(cx, cy - 2, fmt(total), { anchor:'middle', fill:C.ink, weight:650, size:22 }));
-    svg.appendChild(txt(cx, cy + 15, 'forms', { anchor:'middle', size:11.5 }));
+    /* unit null leaves the middle of the ring empty, for a total that would be read
+       as a number of observations when it is a number of boxes ticked */
+    if (unit !== null){
+      svg.appendChild(txt(cx, unit === '' ? cy + 6 : cy - 2, fmt(total),
+                          { anchor:'middle', fill:C.ink, weight:650, size:22 }));
+      if (unit !== '') svg.appendChild(txt(cx, cy + 15, unit || 'forms', { anchor:'middle', size:11.5 }));
+    }
     box.innerHTML = ''; box.appendChild(svg);
     if (listBox) listBox.innerHTML = slices.map(function(s){
       return '<div class="drow"><i class="sw" style="background:' + s.c + '"></i><span class="nm">' +
              esc(s.n) + '</span><span class="vl">' + fmt(s.v) + '</span><span class="pc">' + pct(s.v, total) + '%</span></div>';
     }).join('');
   }
+  function lines(box, cfg){
+    if (!box) return;
+    var W = box.clientWidth || 600, H = +box.dataset.h || 220;
+    var mL = 40, mR = 14, mT = 16, mB = 32;
+    var max = cfg.max != null ? cfg.max : Math.max.apply(null,
+      cfg.series.reduce(function(a, s){ return a.concat(s.data); }, [1]));
+    var tk = ticks(max, cfg.integer); max = tk[tk.length - 1];
+    var pw = W - mL - mR, ph = H - mT - mB;
+    var n = cfg.categories.length, step = n > 1 ? pw / (n - 1) : 0;
+    var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
+    tk.forEach(function(t){
+      var y = mT + ph - (t / max) * ph;
+      svg.appendChild(el('line', { x1:mL, x2:W - mR, y1:y, y2:y, stroke:C.line2, 'stroke-width':1 }));
+      svg.appendChild(txt(mL - 7, y + 4, t + (cfg.suffix || ''), { anchor:'end' }));
+    });
+    cfg.categories.forEach(function(c, i){
+      if (cfg.tickEvery && i % cfg.tickEvery !== 0) return;
+      svg.appendChild(txt(mL + step * i, mT + ph + 16, c, { anchor:'middle' }));
+    });
+    cfg.series.forEach(function(s){
+      var pts = s.data.map(function(v, i){
+        return [mL + step * i, mT + ph - (v / max) * ph]; });
+      var pl = el('polyline', { points:pts.map(function(p){ return p.join(','); }).join(' '),
+        fill:'none', stroke:s.color, 'stroke-width':2, 'stroke-linejoin':'round', 'stroke-linecap':'round' });
+      /* a series contained in another one is dashed, the line answer to the hatching */
+      if (s.dash) pl.setAttribute('stroke-dasharray', '6 4');
+      svg.appendChild(pl);
+      pts.forEach(function(p, i){
+        var dot = el('circle', { cx:p[0], cy:p[1], r:n > 40 ? 2 : 3, fill:s.color });
+        bindTip(dot, '<strong>' + esc(cfg.categories[i]) + '</strong><br>' + esc(s.name) + ': <b>' +
+                     s.data[i] + (cfg.suffix || '') + '</b>');
+        svg.appendChild(dot);
+      });
+    });
+    svg.appendChild(el('line', { x1:mL, x2:W - mR, y1:mT + ph, y2:mT + ph, stroke:C.line, 'stroke-width':1 }));
+    box.innerHTML = ''; box.appendChild(svg);
+  }
+
+  function areas(box, cfg){
+    if (!box) return;
+    var W = box.clientWidth || 600, H = +box.dataset.h || 220;
+    var mL = 40, mR = 14, mT = 16, mB = 32;
+    var n = cfg.categories.length;
+    var totals = cfg.categories.map(function(_, i){
+      return cfg.series.reduce(function(a, s){ return a + s.data[i]; }, 0); });
+    var max = cfg.max != null ? cfg.max : Math.max.apply(null, totals.concat([1]));
+    var tk = ticks(max, cfg.integer); max = tk[tk.length - 1];
+    var pw = W - mL - mR, ph = H - mT - mB, step = n > 1 ? pw / (n - 1) : 0;
+    var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
+    tk.forEach(function(t){
+      var y = mT + ph - (t / max) * ph;
+      svg.appendChild(el('line', { x1:mL, x2:W - mR, y1:y, y2:y, stroke:C.line2, 'stroke-width':1 }));
+      svg.appendChild(txt(mL - 7, y + 4, t + (cfg.suffix || ''), { anchor:'end' }));
+    });
+    cfg.categories.forEach(function(c, i){
+      if (cfg.tickEvery && i % cfg.tickEvery !== 0) return;
+      svg.appendChild(txt(mL + step * i, mT + ph + 16, c, { anchor:'middle' }));
+    });
+    var below = cfg.categories.map(function(){ return 0; });
+    cfg.series.forEach(function(s){
+      var top = s.data.map(function(v, i){ return below[i] + v; });
+      var up = top.map(function(v, i){ return [mL + step * i, mT + ph - (v / max) * ph]; });
+      var down = below.map(function(v, i){ return [mL + step * i, mT + ph - (v / max) * ph]; }).reverse();
+      svg.appendChild(el('polygon', {
+        points:up.concat(down).map(function(p){ return p.join(','); }).join(' '),
+        fill:s.color, 'fill-opacity':0.85, stroke:s.color, 'stroke-width':1 }));
+      up.forEach(function(p, i){
+        if (!s.data[i]) return;
+        var hit = el('circle', { cx:p[0], cy:p[1], r:n > 40 ? 3 : 4, fill:s.color, 'fill-opacity':0 });
+        bindTip(hit, '<strong>' + esc(cfg.categories[i]) + '</strong><br>' + esc(s.name) + ': <b>' +
+                     s.data[i] + (cfg.suffix || '') + '</b>');
+        svg.appendChild(hit);
+      });
+      below = top;
+    });
+    svg.appendChild(el('line', { x1:mL, x2:W - mR, y1:mT + ph, y2:mT + ph, stroke:C.line, 'stroke-width':1 }));
+    box.innerHTML = ''; box.appendChild(svg);
+  }
+
+  function dataTable(box, cfg){
+    if (!box) return;
+    var head = '<tr><th>' + esc(cfg.head || '') + '</th>' +
+      cfg.series.map(function(s){ return '<th class="num">' + s.name + '</th>'; }).join('') +
+      (cfg.totals ? '<th class="num">Total</th>' : '') + '</tr>';
+    var body = cfg.categories.map(function(c, i){
+      return '<tr><td>' + esc(c) + '</td>' +
+        cfg.series.map(function(s){
+          return '<td class="num">' + fmt(s.data[i]) + (cfg.suffix || '') + '</td>'; }).join('') +
+        (cfg.totals ? '<td class="num">' + fmt(cfg.totals[i]) + '</td>' : '') + '</tr>';
+    }).join('');
+    box.innerHTML = '<div class="tablewrap"><table><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+  }
+
   function tile(v, l, cls){ return '<div class="tile ' + (cls || '') + '"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>'; }
 
   /* Time axis rule: up to a month, one bar per day. Up to three months, one bar
@@ -663,12 +1037,26 @@
       { key:'gac',  name:'GO corrected', color:C.gac,  data:rows.map(function(r){ return p ? pct(r.gac, r.total)  : r.gac; }) },
       { key:'stop', name:'STOP',         color:C.stop, data:rows.map(function(r){ return p ? pct(r.stop, r.total) : r.stop; }) } ];
     var cmpOn = cmpAll.filter(function(x){ return cmpShow[x.key]; });
-    bars($('c-compare'), {
-      categories:rows.map(function(r){ return r.name; }),
-      series:cmpOn,
-      max: p ? 100 : null, suffix: p ? '%' : '', valueLabels:true,
-      labelFn:function(i){ return p ? '100%' : fmt(rows[i].total); }
-    });
+    var cmpNames = rows.map(function(r){ return r.name; });
+    if (cmpType === 'table'){
+      dataTable($('c-compare'), { head:{ companies:'Company', sites:'Site', workspaces:'Workspace' }[dim],
+        categories:cmpNames, series:cmpOn, suffix: p ? '%' : '',
+        totals: p ? null : rows.map(function(r){ return r.total; }) });
+    } else {
+      /* the label at the end of a bar counts the visible series only, so hiding an
+         outcome in the key changes the figure as well as the drawing */
+      var cmpVis = rows.map(function(_, i){
+        return cmpOn.reduce(function(a, x){ return a + x.data[i]; }, 0); });
+      bars($('c-compare'), {
+        categories:cmpNames,
+        series:cmpOn, grouped: cmpType === 'grouped',
+        max: p && cmpType !== 'grouped' ? 100 : null, suffix: p ? '%' : '', valueLabels:true,
+        labelFn:function(i){ return p ? Math.round(cmpVis[i] * 10) / 10 + '%' : fmt(cmpVis[i]); }
+      });
+    }
+    /* the collapsible values table would say the same thing twice */
+    var vals = $('c-compare').closest('section').querySelector('details.values');
+    if (vals) vals.hidden = cmpType === 'table';
     $('th-dim').textContent = { companies:'Company', sites:'Site', workspaces:'Workspace' }[dim];
     var cell = function(v, total){ return p ? pct(v, total) + '%' : fmt(v); };
     $('tb-compare').innerHTML = rows.map(function(r){
@@ -709,9 +1097,13 @@
                       { key:'gac',  name:'GO corrected', color:C.gac,  raw:dl.gac },
                       { key:'stop', name:'STOP',             color:C.stop, raw:dl.stop } ];
     var visible = allSeries.filter(function(x){ return show[x.key]; });
-    columns($('c-daily'), { categories:bLabels, tickEvery: tb.size === 1 ? 4 : 1,
-      suffix: pctMode ? '%' : '', max: pctMode ? 100 : null,
-      series: visible.map(function(x){ return { name:x.name, color:x.color, data:series(x.raw) }; }) });
+    var dailySeries = visible.map(function(x){ return { name:x.name, color:x.color, data:series(x.raw) }; });
+    var dailyDraw = dailyType === 'line' ? lines : (dailyType === 'area' ? areas : columns);
+    dailyDraw($('c-daily'), {
+      categories:bLabels, tickEvery: tb.size === 1 ? 4 : 1,
+      suffix: pctMode ? '%' : '', max: pctMode ? 100 : null, integer: !pctMode,
+      grouped: dailyType === 'grouped',
+      series: dailySeries });
     var hidden = allSeries.filter(function(x){ return !show[x.key]; }).map(function(x){ return x.name; });
     $('daily-note').textContent = (pctMode
       ? 'Each day scaled to 100%, so the mix is comparable across days of different volume. Period mix: ' +
@@ -735,7 +1127,9 @@
     var pdTb = timeBuckets(D.daily_labels);
     var permitSeries = [
       { key:'epermit', name:'Linked to e-permit',     color:C.brand, data:bucketSeries(D.permit_daily.epermit, pdTb.groups) },
-      { key:'paper',   name:'Linked to paper permit', color:C.cat1,  data:bucketSeries(D.permit_daily.paper,   pdTb.groups) } ];
+      /* grey, not a second blue: on this page the platform blue is the digital flow and
+         grey is what sits outside it, which is exactly what a paper permit is */
+      { key:'paper',   name:'Linked to paper permit', color:C.cat3,  data:bucketSeries(D.permit_daily.paper,   pdTb.groups) } ];
     columns($('c-permit-daily'), {
       categories:pdTb.groups.map(function(g){ return g.label; }),
       tickEvery: pdTb.size === 1 ? 4 : 1, integer:true, valueLabels:true,
@@ -900,6 +1294,7 @@
     });
   }
   wire('seg-vol',  function(v){ vol = v; }, true);
+
   $('cmp-keys').addEventListener('click', function(e){
     var b = e.target.closest('button'); if (!b) return;
     var k = b.dataset.s, on = b.getAttribute('aria-pressed') === 'true';
@@ -938,6 +1333,10 @@
       m:[268, 291, 224, 279, 312, 338, 322, 361, 334, 288, 307, 348] },
     { n:'Life saving checks', c:'#E0A82E', on:false, vol:96,  nc:11, rate:11.5, gac:0,
       m:[72, 80, 59, 76, 85, 93, 88, 99, 91, 78, 83, 96] },
+    /* an HSE observation is never compliant or not, so this KPI has no place in the
+       non-compliant block at all: it is left out there rather than shown as a zero */
+    { n:'HSE Observation',    c:'#FF6700', on:false, vol:212, noNC:true, nc:0, rate:0, gac:0,
+      m:[163, 178, 137, 170, 190, 206, 196, 220, 203, 175, 187, 212] },
     { n:'Prejob briefing',    c:'#94a3b8', on:false, vol:149, nc:4,  rate:2.7, gac:0,
       m:[115, 127, 93, 121, 135, 147, 140, 158, 145, 124, 132, 149] },
     { n:'Safety green light', c:'#0E7C5A', on:true,  vol:153, nc:3,  rate:2,   gac:0,
@@ -958,18 +1357,32 @@
     columns($('c-x-vol'), { categories:names, valueLabels:true, integer:true,
       series:[{ name:'Total submissions', color:C.brand, data:sel.map(function(k){ return k.vol; }) }] });
 
-    $('t-x-nc').innerHTML = sel.map(function(k){
+    /* only the KPIs that carry the question at all */
+    var ncSel = sel.filter(function(k){ return !k.noNC; });
+    var ncOut = sel.filter(function(k){ return k.noNC; });
+    $('t-x-nc').innerHTML = ncSel.map(function(k){
       return tile(fmt(k.nc) + ' \u00b7 ' + k.rate + '%', k.n); }).join('');
-    columns($('c-x-nc'), { categories:names, valueLabels:true, integer:true,
-      series:[{ name:'Non-compliant', colors:sel.map(function(){ return C.stop; }),
-                data:sel.map(function(k){ return k.nc; }) }] });
-    Array.prototype.forEach.call($('c-x-nc').querySelectorAll('rect'), function(node, i){
-      var k = sel.filter(function(x){ return x.nc; })[i]; if (!k) return;
-      bindTip(node, '<strong>' + esc(k.n) + '</strong><br><b>' + fmt(k.nc) + '</b> ' +
-                    (k.n === 'PJB & SGL' ? 'form' + (k.nc === 1 ? '' : 's') + ' ended in a STOP'
-                                         : 'non-compliant form' + (k.nc === 1 ? '' : 's')) +
-                    '<br>' + k.rate + '% of ' + fmt(k.vol));
-    });
+    if (ncSel.length){
+      columns($('c-x-nc'), { categories:ncSel.map(function(k){ return k.n; }),
+        valueLabels:true, integer:true,
+        series:[{ name:'Non-compliant', colors:ncSel.map(function(){ return C.stop; }),
+                  data:ncSel.map(function(k){ return k.nc; }) }] });
+      var drawn = ncSel.filter(function(x){ return x.nc; });
+      Array.prototype.forEach.call($('c-x-nc').querySelectorAll('rect'), function(node, i){
+        var k = drawn[i]; if (!k) return;
+        bindTip(node, '<strong>' + esc(k.n) + '</strong><br><b>' + fmt(k.nc) + '</b> ' +
+                      (k.n === 'PJB & SGL' ? 'form' + (k.nc === 1 ? '' : 's') + ' ended in a STOP'
+                                           : 'non-compliant form' + (k.nc === 1 ? '' : 's')) +
+                      '<br>' + k.rate + '% of ' + fmt(k.vol));
+      });
+    } else {
+      $('c-x-nc').innerHTML = '';
+    }
+    $('n-x-nc').textContent = ncOut.length
+      ? 'Left out: ' + ncOut.map(function(k){ return k.n; }).join(', ') +
+        (ncOut.length === 1 ? ', which does not ask a compliance question.'
+                            : ', which do not ask a compliance question.')
+      : '';
 
     columns($('c-x-month'), { categories:XM, grouped:true, integer:true,
       series:sel.map(function(k){ return { name:k.n, color:k.c, data:k.m }; }) });
@@ -986,6 +1399,279 @@
     drawCross();
   });
 
+  /* --- HSE Observation --- */
+  var hVol = 'volume', hDim = 'companies', hMsr = 'volume';
+  var hDailyType = 'bars', hCmpType = 'stacked';
+  var scShow = { sc:true };
+  var hShow = { good:true, anom:true };
+
+  function hSeries(){
+    return [ { key:'good', name:'Good practice', color:C.good },
+             { key:'anom', name:'Anomaly',       color:C.anom } ];
+  }
+  /* the swatch of the hatched part: the same 45 degree stripes the chart draws */
+  /* the swatch is 11px across, so it takes a finer pitch than the bars: the same stripes
+     at chart scale would fill it and it would read as a flat light square */
+  var HATCH = 'repeating-linear-gradient(45deg,' + C.hatch + ' 0 1.6px,' + C.anom + ' 1.6px 4.5px)';
+  function hKeys(box){
+    $(box).innerHTML = hSeries().map(function(x){
+      return '<button type="button" class="key" data-s="' + x.key + '" aria-pressed="' + hShow[x.key] +
+             '"><i class="sw" style="background:' + x.color + '"></i> ' + esc(x.name) + '</button>';
+    }).join('');
+  }
+  function hKeyClick(box, after){
+    $(box).addEventListener('click', function(e){
+      var b = e.target.closest('button'); if (!b) return;
+      var k = b.dataset.s; if (!k) return;      // the total tile is not a key
+      var on = b.getAttribute('aria-pressed') === 'true';
+      /* the Stop Card is a part of the anomalies, not a kind of its own, so taking it
+         out never empties the chart and it is free to switch off */
+      if (k === 'sc'){
+        scShow.sc = !on;
+      } else {
+        var live = Object.keys(hShow).filter(function(x){ return hShow[x]; }).length;
+        if (on && live === 1) return;         // never hide the last one
+        hShow[k] = !on;
+      }
+      renderHse();
+    });
+  }
+
+  function renderHse(){
+    var H = D.hse, SC = H.stopcard, asPct = hVol === 'percentage';
+    var stopByRule = {}, catStop = {};
+    (SC.rules || []).forEach(function(x){ stopByRule[x.name] = x.stop; });
+    (SC.categories || []).forEach(function(x){ catStop[x.name] = x.stop; });
+
+    /* 1 · the banner and the chart over the period */
+    /* the banner is also the key of the chart below: each figure carries the colour that
+       draws it, and clicking the tile takes that kind out. One row instead of two, and the
+       colour sits against its own number rather than under the chart. */
+    function keyTile(k, swatch, value, label, on, cls, extra){
+      return '<button type="button" class="tile ' + (cls || '') + '" data-s="' + k +
+             '" aria-pressed="' + on + '"><div class="v"><i class="sw" style="background:' +
+             swatch + '"></i>' + value + '</div><div class="l">' + esc(label) + '</div>' +
+             (extra || '') + '</button>';
+    }
+    $('h-banner').innerHTML =
+      tile(fmt(H.submitted), 'Observations') +
+      /* the label never repeats the other view's figure: the two views are one click apart */
+      keyTile('good', C.good, (asPct ? pct(H.good, H.submitted) + '%' : fmt(H.good)),
+              'Good practice', hShow.good) +
+      keyTile('anom', C.anom, (asPct ? pct(H.anom, H.submitted) + '%' : fmt(H.anom)),
+              'Anomaly', hShow.anom) +
+      /* on the same line as the others, one size down. No percentage in the volume view
+         either, the percentage view is one click away. */
+      keyTile('sc', HATCH,
+              (asPct ? pct(SC.used, H.anom) + '%' : fmt(SC.used)),
+              'Stop Card used',
+              scShow.sc && hShow.anom, 'sub');
+
+    var tb = timeBuckets(D.daily_labels), labels = tb.groups.map(function(g){ return g.label; });
+    var dl = { good:bucketSeries(H.daily.good, tb.groups), anom:bucketSeries(H.daily.anom, tb.groups) };
+    var dStop = bucketSeries(SC.daily, tb.groups);
+    /* the two kinds are what the chart adds up; the Stop Card is a part of the anomalies,
+       so it is hatched over the orange, never stacked on it */
+    var shown = { good:hShow.good, anom:hShow.anom };
+    var tot = labels.map(function(_, i){
+      return (shown.good ? dl.good[i] : 0) + (shown.anom ? dl.anom[i] : 0);
+    });
+    function asSeries(arr){
+      return asPct ? arr.map(function(v, i){ return tot[i] ? Math.round(v / tot[i] * 1000) / 10 : 0; }) : arr;
+    }
+    var daily = [], anomAt = -1;
+    if (shown.good) daily.push({ name:'Good practice', color:C.good, data:asSeries(dl.good) });
+    if (shown.anom){ anomAt = daily.length;
+                     daily.push({ name:'Anomaly', color:C.anom, data:asSeries(dl.anom) }); }
+    /* stacked areas read as a sum, so a part of a band cannot be drawn in them */
+    var canInset = hDailyType !== 'area' && hDailyType !== 'line';
+    var scOn = scShow.sc && shown.anom;
+    if (scOn && hDailyType === 'line')
+      daily.push({ name:'Where a Stop Card was used', color:C.stop, dash:true,
+                   data:asSeries(dStop) });
+    var hDraw = hDailyType === 'line' ? lines : (hDailyType === 'area' ? areas : columns);
+    var hCfg = {
+      categories:labels, tickEvery: tb.size === 1 ? 4 : 1,
+      suffix: asPct ? '%' : '', max: asPct ? 100 : null, integer: !asPct,
+      grouped: hDailyType === 'grouped', series:daily,
+      /* the Stop Card is read on demand, in the tooltip of the bar, so the chart itself
+         stays on the two kinds and the count is always given over its own base. It is
+         asked on the anomaly bar only: a good practice never carries a Stop Card. */
+      tipExtra:function(i, si, s){
+        if (!s || s.name !== 'Anomaly' || !dl.anom[i]) return '';
+        return 'Stop Card used ' + fmt(dStop[i]) + ' of ' + fmt(dl.anom[i]) + ' · ' +
+               pct(dStop[i], dl.anom[i]) + '%'; } };
+    if (scOn && canInset)
+      hCfg.inset = { name:'Where a Stop Card was used', color:C.stop, hatch:C.hatch,
+                     data:asSeries(dStop), series:anomAt };
+    hDraw($('h-daily'), hCfg);
+
+    var off = [];
+    if (!shown.good) off.push('Good practice');
+    if (!shown.anom) off.push('Anomaly');
+    if (shown.anom && !scShow.sc) off.push('Stop Card used');
+    /* one short sentence per thing the reader needs, and each thing said once. Nothing here
+       names a bar or a day: on a long period a mark is a fortnight or a month, not a day. */
+    $('h-daily-note').textContent =
+      (scOn && canInset
+        ? 'The hatching inside the orange marks the anomalies where a Stop Card was used. '
+        : '') +
+      (scOn && hDailyType === 'area'
+        ? 'A Stop Card is a part of the anomalies and a stacked area reads as a sum, so it is not drawn here. Bars or lines show it. '
+        : '') +
+      'Hover to get the figures.' +
+      (off.length ? ' Hidden: ' + off.join(', ') + '.' : '');
+
+    /* 2 · by category, one ring per kind */
+    var catBlue = { Health:C.catHealth, Safety:C.catSafety,
+                    Security:C.catSecurity, Environment:C.catEnv };
+    var catOrange = { Health:C.catAHealth, Safety:C.catASafety,
+                      Security:C.catASecurity, Environment:C.catAEnv };
+    var catGood = H.categories.reduce(function(a, r){ return a + r.good; }, 0);
+    var catAnom = H.categories.reduce(function(a, r){ return a + r.anom; }, 0);
+    /* each ring speaks only of its own kind: naming the other one inside it put a number
+       on screen that belongs to the ring next door, and a second percentage on a base the
+       reader had no way to guess */
+    /* the slice already carries its share of the ring in writing, so the hover says the
+       count first, then the Stop Card inside this category, then the same Stop Cards
+       against the whole period. Each percentage names its own base. */
+    function catRing(box, list, key, palette, word){
+      var rows = H.categories.slice().sort(function(a, b){ return b[key] - a[key]; });
+      donut($(box), $(list), rows.map(function(r){
+        var st = key === 'anom' ? (catStop[r.name] || 0) : 0;
+        return { n:r.name, v:r[key], c:palette[r.name] || C.brand,
+                 /* the count and its share of the category travel on the same line as the
+                    anomalies they come from; the share of the whole period gets its own */
+                 /* "Stop Card" stays singular here: it names the question on the form,
+                    not a countable object, exactly as the user wrote it */
+                 w:st ? word + ' in which ' + fmt(st) + ' Stop Card used, representing ' +
+                        pct(st, r.anom) + '%.' : word,
+                 d:st ? 'and ' + pct(st, SC.used) + '% of all the ' + fmt(SC.used) +
+                        ' Stop Cards over the period.' : '' }; }),
+            null, function(sl){ return sl.w; }, true, true);
+    }
+    catRing('h-cats-good', 'h-cats-good-list', 'good', catBlue, 'good practices');
+    catRing('h-cats-anom', 'h-cats-anom-list', 'anom', catOrange, 'anomalies');
+    var catStopSum = H.categories.reduce(function(a, r){ return a + (catStop[r.name] || 0); }, 0);
+    $('h-cats-note').textContent =
+      'A ring counts the categories ticked on its own kind, ' + fmt(catGood) +
+      ' on the good practice side and ' + fmt(catAnom) + ' on the anomaly side, not the ' +
+      fmt(H.submitted) + ' observations: one observation can carry several categories. The ' +
+      'percentages on the ring are shares of those numbers. In the hover, the Stop Card ' +
+      'shares of the period add up to more than 100% for the same reason: the ' + fmt(SC.used) +
+      ' Stop Cards are counted once under each category their anomaly ticked, ' +
+      fmt(catStopSum) + ' times in all.';
+
+    /* 2b · anomalies by golden rules */
+    var rules = H.rules.slice().sort(function(a, b){ return b.anom - a.anom; });
+    /* clicking a rule opens the Observed anomaly list ticked under it in the form */
+    function ruleModal(r){
+      var S = r.situations || { rows:[], unspecified:0, compliant:0 };
+      /* the list is the form's own, Compliant included, in the same words */
+      var rows = S.rows.concat(S.compliant ? [{ name:'Compliant', anom:S.compliant }] : [])
+                   .sort(function(a, b){ return b.anom - a.anom; });
+      var body = rows.map(function(x){
+        return '<div class="srow"><span class="nm">' + esc(x.name) + '</span><span class="vl">' +
+               fmt(x.anom) + '</span><span class="pc">' + pct(x.anom, r.anom) + '%</span></div>'; }).join('');
+      if (S.unspecified)
+        body += '<div class="srow quiet"><span class="nm">No answer provided</span><span class="vl">' +
+                fmt(S.unspecified) + '</span><span class="pc">' + pct(S.unspecified, r.anom) + '%</span></div>';
+      body += '<div class="srow"><span class="nm" style="color:' + C.stop + '">Stop Card used</span>' +
+              '<span class="vl">' + fmt(stopByRule[r.name] || 0) + '</span><span class="pc">' +
+              pct(stopByRule[r.name] || 0, r.anom) + '%</span></div>';
+      body += '<p class="footnote" style="margin-top:12px">An anomaly can tick several lines at once, so ' +
+              'they add up to more than the ' + fmt(r.anom) + ' anomalies that ticked this rule. The list ' +
+              'is optional, so one line counts those who ticked the rule and left it empty.</p>';
+      openModal(r.name, fmt(r.anom) + ' anomalies ticked this rule', body);
+    }
+    var ruleSeries = [{ name:'Anomaly', color:C.anom,
+                        data:rules.map(function(r){ return r.anom; }) }];
+    bars($('h-rules'), {
+      categories:rules.map(function(r){ return r.name; }),
+      series:ruleSeries, valueLabels:true, rowH:30,
+      inset:{ name:'Stop Card used', color:C.stop, hatch:C.hatch,
+              data:rules.map(function(r){ return stopByRule[r.name] || 0; }) },
+      labelFn:function(i){ return fmt(rules[i].anom); },
+      /* the same two lines as the category rings, so one quantity is read the same way
+         wherever it appears on the tab */
+      tipBody:function(i){
+        var r = rules[i], st = stopByRule[r.name] || 0;
+        return st
+          ? '\u2022\u2002<b>' + fmt(r.anom) + '</b> anomalies in which ' + fmt(st) +
+            ' Stop Card used, representing ' + pct(st, r.anom) + '%.' +
+            '<br>\u2022\u2002and ' + pct(st, SC.used) + '% of all the ' + fmt(SC.used) +
+            ' Stop Cards over the period.'
+          : '<b>' + fmt(r.anom) + '</b> anomalies';
+      },
+      onPick:function(i){ ruleModal(rules[i]); } });
+    $('h-rules-keys').innerHTML =
+      '<span class="key"><i class="sw" style="background:' + C.anom + '"></i> Anomalies by rule</span>' +
+      '<span class="key"><i class="sw" style="background:' + HATCH + '"></i> Where a Stop Card was used</span>';
+    var ruleSum = rules.reduce(function(a, r){ return a + r.anom; }, 0);
+    $('h-rules-note').textContent =
+      'Sorted by volume. An anomaly can tick several golden rules, so the bars add up to ' +
+      fmt(ruleSum) + ', more than the ' + fmt(H.anom) + ' anomalies.';
+
+    /* 5 · comparison */
+    var rows = H[hDim], p = hMsr === 'percentage';
+    var hCmpSeries = hSeries().filter(function(x){ return hShow[x.key]; }).map(function(x){
+      return { name:x.name, color:x.color,
+               data:rows.map(function(r){ return p ? pct(r[x.key], r.total) : r[x.key]; }) }; });
+    if (hCmpType === 'table'){
+      dataTable($('h-compare'), {
+        head:{ companies:'Company', sites:'Site', workspaces:'Workspace' }[hDim],
+        categories:rows.map(function(r){ return r.name; }), series:hCmpSeries, suffix: p ? '%' : '',
+        totals: p ? null : rows.map(function(r){ return r.total; }) });
+    } else {
+      var hVis = rows.map(function(_, i){
+        return hCmpSeries.reduce(function(a, x){ return a + x.data[i]; }, 0); });
+      bars($('h-compare'), {
+        categories:rows.map(function(r){ return r.name; }),
+        series:hCmpSeries, grouped: hCmpType === 'grouped',
+        max: p && hCmpType !== 'grouped' ? 100 : null, suffix: p ? '%' : '', valueLabels:true,
+        labelFn:function(i){ return p ? Math.round(hVis[i] * 10) / 10 + '%' : fmt(hVis[i]); } });
+    }
+    hKeys('h-cmp-keys');
+    /* the category is not a dimension here: it is a multi select, so its rows would add up
+       to more than the observations, unlike a company, a site or a workspace which each
+       hold one observation once. It has its own block, the two rings above. */
+    var cmpNote = $('h-cmp-note');
+    if (cmpNote) cmpNote.textContent = '';
+  }
+
+  function hWire(id, set){
+    var seg = $(id);
+    seg.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if (!b) return;
+      Array.prototype.forEach.call(seg.querySelectorAll('button'), function(x){
+        x.setAttribute('aria-pressed', String(x === b)); });
+      set(b.dataset.v); renderHse();
+    });
+  }
+  function pickType(id, set, after){
+    var sel = $(id); if (!sel) return;
+    sel.addEventListener('change', function(){ set(sel.value); after(); });
+  }
+  pickType('pick-daily',   function(v){ dailyType = v; },   render);
+  pickType('pick-cmp',     function(v){ cmpType = v; },     drawCompare);
+  pickType('pick-h-daily', function(v){ hDailyType = v; },  renderHse);
+  pickType('pick-h-cmp',   function(v){ hCmpType = v; },    renderHse);
+  hWire('h-seg-vol', function(v){ hVol = v; });
+  /* the measure switch explains itself on hover, so the grey line under the chart does not
+     have to carry a sentence about a view the reader is not in */
+  (function(){
+    var seg = $('h-seg-vol'); if (!seg) return;
+    /* only the one that says something the label does not: "By volume" speaks for itself */
+    var tips = { percentage:'Each column scaled to 100%, to compare periods of different volume.' };
+    Array.prototype.forEach.call(seg.querySelectorAll('button'), function(b){
+      if (tips[b.dataset.v]) bindTip(b, tips[b.dataset.v]);
+    });
+  })();
+  hWire('h-seg-dim', function(v){ hDim = v; });
+  hWire('h-seg-msr', function(v){ hMsr = v; });
+  hKeyClick('h-banner');
+  hKeyClick('h-cmp-keys');
+
   Array.prototype.forEach.call(document.querySelectorAll('button.tab'), function(b){
     b.addEventListener('click', function(){
       var v = b.dataset.view;
@@ -994,7 +1680,7 @@
       Array.prototype.forEach.call(document.querySelectorAll('.view'), function(sec){
         sec.hidden = sec.classList.contains('view-' + v) ? false : true; });
       scrollTo(0, 0);
-      render(); drawCross();
+      render(); drawCross(); renderHse();
     });
   });
 
@@ -1002,7 +1688,7 @@
     d.addEventListener('toggle', function(){ if (d.open) render(); });
   });
 
-  render(); drawCross();
-  var t; addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ render(); drawCross(); }, 160); });
+  render(); drawCross(); renderHse();
+  var t; addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ render(); drawCross(); renderHse(); }, 160); });
 })();
 </script>
