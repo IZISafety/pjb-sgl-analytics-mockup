@@ -1231,9 +1231,9 @@
      "stop": 7
     },
     {
-     "name": "PPE",
-     "anom": 21,
-     "stop": 4
+     "name": "Traffic",
+     "anom": 14,
+     "stop": 3
     },
     {
      "name": "Body Mechanics & Tools",
@@ -1241,47 +1241,47 @@
      "stop": 7
     },
     {
+     "name": "PPE",
+     "anom": 9,
+     "stop": 3
+    },
+    {
      "name": "Work permit",
-     "anom": 15,
-     "stop": 5
-    },
-    {
-     "name": "Traffic",
-     "anom": 14,
-     "stop": 6
-    },
-    {
-     "name": "Work at height",
-     "anom": 13,
-     "stop": 6
+     "anom": 7,
+     "stop": 3
     },
     {
      "name": "Lifting operations",
      "anom": 11,
-     "stop": 3
-    },
-    {
-     "name": "Line of danger",
-     "anom": 10,
-     "stop": 6
+     "stop": 5
     },
     {
      "name": "Energized Systems",
-     "anom": 9,
-     "stop": 2
+     "anom": 15,
+     "stop": 4
     },
     {
      "name": "Confined spaces",
      "anom": 8,
-     "stop": 3
-    },
-    {
-     "name": "Hot works",
-     "anom": 7,
-     "stop": 2
+     "stop": 5
     },
     {
      "name": "Excavation work",
+     "anom": 10,
+     "stop": 2
+    },
+    {
+     "name": "Work at height",
+     "anom": 21,
+     "stop": 8
+    },
+    {
+     "name": "Hot works",
+     "anom": 13,
+     "stop": 4
+    },
+    {
+     "name": "Line of danger",
      "anom": 6,
      "stop": 2
     }
@@ -1409,80 +1409,6 @@
     }
    },
    {
-    "name": "PPE",
-    "anom": 21,
-    "situations": {
-     "rows": [
-      {
-       "name": "Helmet not worn in the required zone",
-       "anom": 7
-      },
-      {
-       "name": "Eye protection missing",
-       "anom": 6
-      },
-      {
-       "name": "Gloves not suited to the product handled",
-       "anom": 5
-      },
-      {
-       "name": "Hearing protection not worn",
-       "anom": 3
-      }
-     ],
-     "unspecified": 2,
-     "compliant": 3
-    }
-   },
-   {
-    "name": "Body Mechanics & Tools",
-    "anom": 18,
-    "situations": {
-     "rows": [
-      {
-       "name": "Manual handling beyond the allowed load",
-       "anom": 5
-      },
-      {
-       "name": "Tool not suited to the task",
-       "anom": 5
-      },
-      {
-       "name": "Damaged or modified tool kept in service",
-       "anom": 4
-      },
-      {
-       "name": "Working posture at risk",
-       "anom": 3
-      }
-     ],
-     "unspecified": 2,
-     "compliant": 3
-    }
-   },
-   {
-    "name": "Work permit",
-    "anom": 15,
-    "situations": {
-     "rows": [
-      {
-       "name": "Pre-job briefing not signed",
-       "anom": 5
-      },
-      {
-       "name": "Safety Green Light not done",
-       "anom": 5
-      },
-      {
-       "name": "No stop, risk reassessment or supervisor notification when conditions changed",
-       "anom": 4
-      }
-     ],
-     "unspecified": 2,
-     "compliant": 2
-    }
-   },
-   {
     "name": "Traffic",
     "anom": 14,
     "situations": {
@@ -1521,29 +1447,77 @@
     }
    },
    {
-    "name": "Work at height",
-    "anom": 13,
+    "name": "Body Mechanics & Tools",
+    "anom": 18,
     "situations": {
      "rows": [
       {
-       "name": "Harness not clipped",
+       "name": "Manual handling beyond the allowed load",
+       "anom": 5
+      },
+      {
+       "name": "Tool not suited to the task",
+       "anom": 5
+      },
+      {
+       "name": "Damaged or modified tool kept in service",
        "anom": 4
       },
       {
-       "name": "Guardrail missing or incomplete",
-       "anom": 4
-      },
+       "name": "Working posture at risk",
+       "anom": 3
+      }
+     ],
+     "unspecified": 2,
+     "compliant": 3
+    }
+   },
+   {
+    "name": "PPE",
+    "anom": 9,
+    "situations": {
+     "rows": [
       {
-       "name": "Ladder used as a work platform",
+       "name": "Helmet not worn in the required zone",
        "anom": 3
       },
       {
-       "name": "Tools not secured against dropping",
+       "name": "Eye protection missing",
+       "anom": 3
+      },
+      {
+       "name": "Gloves not suited to the product handled",
+       "anom": 2
+      },
+      {
+       "name": "Hearing protection not worn",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 1
+    }
+   },
+   {
+    "name": "Work permit",
+    "anom": 7,
+    "situations": {
+     "rows": [
+      {
+       "name": "Pre-job briefing not signed",
+       "anom": 2
+      },
+      {
+       "name": "Safety Green Light not done",
+       "anom": 2
+      },
+      {
+       "name": "No stop, risk reassessment or supervisor notification when conditions changed",
        "anom": 2
       }
      ],
      "unspecified": 1,
-     "compliant": 2
+     "compliant": 1
     }
    },
    {
@@ -1573,59 +1547,29 @@
     }
    },
    {
-    "name": "Line of danger",
-    "anom": 10,
-    "situations": {
-     "rows": [
-      {
-       "name": "Positioned in the path of a pressure release",
-       "anom": 3
-      },
-      {
-       "name": "Positioned in the path of a dropped object",
-       "anom": 2
-      },
-      {
-       "name": "No safety barriers or exclusion zones",
-       "anom": 2
-      },
-      {
-       "name": "Loose objects not secured",
-       "anom": 1
-      },
-      {
-       "name": "No respect of safety barriers or exclusion zones",
-       "anom": 1
-      }
-     ],
-     "unspecified": 1,
-     "compliant": 2
-    }
-   },
-   {
     "name": "Energized Systems",
-    "anom": 9,
+    "anom": 15,
     "situations": {
      "rows": [
       {
        "name": "Isolation not verified before work",
-       "anom": 3
+       "anom": 5
       },
       {
        "name": "Lock out tag out not applied",
-       "anom": 3
+       "anom": 4
       },
       {
        "name": "Stored energy not released",
-       "anom": 2
+       "anom": 3
       },
       {
        "name": "Live work without authorisation",
-       "anom": 1
+       "anom": 2
       }
      ],
-     "unspecified": 1,
-     "compliant": 1
+     "unspecified": 2,
+     "compliant": 2
     }
    },
    {
@@ -1671,54 +1615,110 @@
     }
    },
    {
-    "name": "Hot works",
-    "anom": 7,
-    "situations": {
-     "rows": [
-      {
-       "name": "No hot work permit",
-       "anom": 2
-      },
-      {
-       "name": "Flammable substance or ignition source nearby",
-       "anom": 1
-      },
-      {
-       "name": "No written authorization before starting hot work",
-       "anom": 1
-      },
-      {
-       "name": "Gas test not performed in the hazardous area",
-       "anom": 1
-      },
-      {
-       "name": "No continuous gas monitoring in the hazardous area",
-       "anom": 1
-      }
-     ],
-     "unspecified": 1,
-     "compliant": 1
-    }
-   },
-   {
     "name": "Excavation work",
-    "anom": 6,
+    "anom": 10,
     "situations": {
      "rows": [
       {
        "name": "No safe access when the excavation is deeper than 1.3 m (4 ft)",
-       "anom": 2
+       "anom": 3
       },
       {
        "name": "No shoring or sloping of the walls",
-       "anom": 1
+       "anom": 3
       },
       {
        "name": "Underground networks not located before digging",
-       "anom": 1
+       "anom": 2
       },
       {
        "name": "Spoil stored at the edge of the excavation",
+       "anom": 1
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Work at height",
+    "anom": 21,
+    "situations": {
+     "rows": [
+      {
+       "name": "Harness not clipped",
+       "anom": 7
+      },
+      {
+       "name": "Guardrail missing or incomplete",
+       "anom": 6
+      },
+      {
+       "name": "Ladder used as a work platform",
+       "anom": 5
+      },
+      {
+       "name": "Tools not secured against dropping",
+       "anom": 3
+      }
+     ],
+     "unspecified": 2,
+     "compliant": 3
+    }
+   },
+   {
+    "name": "Hot works",
+    "anom": 13,
+    "situations": {
+     "rows": [
+      {
+       "name": "No hot work permit",
+       "anom": 4
+      },
+      {
+       "name": "Flammable substance or ignition source nearby",
+       "anom": 3
+      },
+      {
+       "name": "No written authorization before starting hot work",
+       "anom": 2
+      },
+      {
+       "name": "Gas test not performed in the hazardous area",
+       "anom": 2
+      },
+      {
+       "name": "No continuous gas monitoring in the hazardous area",
+       "anom": 2
+      }
+     ],
+     "unspecified": 1,
+     "compliant": 2
+    }
+   },
+   {
+    "name": "Line of danger",
+    "anom": 6,
+    "situations": {
+     "rows": [
+      {
+       "name": "Positioned in the path of a pressure release",
+       "anom": 1
+      },
+      {
+       "name": "Positioned in the path of a dropped object",
+       "anom": 1
+      },
+      {
+       "name": "No safety barriers or exclusion zones",
+       "anom": 1
+      },
+      {
+       "name": "Loose objects not secured",
+       "anom": 1
+      },
+      {
+       "name": "No respect of safety barriers or exclusion zones",
        "anom": 1
       }
      ],
