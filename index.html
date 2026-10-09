@@ -1,12 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>PJB &amp; SGL analytics, mockup</title>
-</head>
-<body>
 <title>PJB &amp; SGL First Release</title>
 <style>
   :root{
@@ -23,6 +14,9 @@
     --obs-anom-ink:#C44F00;                 /* the same orange, darkened for text on white */
     /* the four HSE categories: one colour per ring at four densities, as if the same ink
        were laid thinner. Safety carries it at full strength, 74%, 56% and 40% follow */
+    /* one hue per ring, laid at four densities: the violet of the good practice on the left
+       ring, the safety orange of the anomaly on the right. Safety carries the full strength,
+       then 74%, 56% and 40%, fixed per category rather than per rank */
     --cat-safety:#6C20DF; --cat-health:#925AE7; --cat-security:#AD82ED; --cat-env:#C4A6F2;
     --cata-safety:#FF6700; --cata-health:#FF8F42; --cata-security:#FFAA70; --cata-env:#FFC299;
     --new-bg:#e6ecf5; --new-ink:#004196;
@@ -141,8 +135,14 @@
     .rings .ringbox + .ringbox{border-left:0; border-top:1px solid #dde3e7; padding-top:18px; margin-top:4px}
   }
   .ring-h{margin:0; font-size:13px; font-weight:650; color:var(--ink)}
+  /* the kind is named with the colour that draws it, so the ring below needs no legend */
+  .ring-h.kind{display:flex; align-items:center; gap:7px}
   .ring-head{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
   .pill.keep{background:var(--surface-2); color:var(--ink-3)}
+  /* named catchip and not chip: a .chip rule already exists further down for the status
+     pills, and it was overriding the layout of this one */
+  .catchip{width:23px; height:23px; border-radius:6px; flex:none; display:flex;
+           align-items:center; justify-content:center; padding:0}
   .drow{display:flex; align-items:center; gap:9px; font-size:13px}
   .drow .nm{color:var(--ink-2); flex:1 1 auto; min-width:0}
   .drow .vl{font-variant-numeric:tabular-nums; font-weight:650}
@@ -483,12 +483,12 @@
       <p class="panel-sub">Health, Safety, Security and Environment, on one ring for the good practice and one for the anomalies.</p>
       <div class="grid two" style="margin-bottom:0">
         <div>
-          <h4 class="ring-h">Good practice</h4>
+          <h4 class="ring-h kind"><i class="sw" style="background:var(--obs-good)"></i>Good practice</h4>
           <div class="chart" id="h-cats-good" data-h="290"></div>
           <div class="dlist" id="h-cats-good-list"></div>
         </div>
         <div>
-          <h4 class="ring-h">Anomaly</h4>
+          <h4 class="ring-h kind"><i class="sw" style="background:var(--obs-anom)"></i>Anomaly</h4>
           <div class="chart" id="h-cats-anom" data-h="290"></div>
           <div class="dlist" id="h-cats-anom-list"></div>
         </div>
@@ -499,8 +499,8 @@
 
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Anomalies by Golden rules</h3></div>
-      <p class="panel-sub">A bar counts the anomalies that ticked the rule, including those where the rule was found compliant. Click on the bar for more details. A good practice carries no golden rule.</p>
+      <div class="panel-head"><h3>Anomalies by Golden Rules</h3></div>
+      <p class="panel-sub">A bar counts the anomalies that ticked the Golden Rule, including those where it was found compliant.<br>&#128073; <strong>Click on a bar to view the detailed breakdown of the selected Golden Rule.</strong></p>
       <div class="chart" id="h-rules"></div>
       <div class="keys" id="h-rules-keys"></div>
       <p class="footnote" id="h-rules-note"></p>
@@ -511,7 +511,7 @@
   <div class="grid">
     <section class="card panel">
       <div class="panel-head"><h3>Comparison of results</h3><label class="typepick">Type <select id="pick-h-cmp"><option value="stacked" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="table">Table</option></select></label></div>
-      <p class="panel-sub">How observations break down across companies, sites, workspaces and categories.</p>
+      <p class="panel-sub">How observations break down across companies, sites and workspaces.</p>
       <div class="controls">
         <div class="seg" id="h-seg-dim" role="group" aria-label="Dimension">
           <button type="button" data-v="companies" aria-pressed="true">By company</button>
@@ -593,7 +593,7 @@
 
 <script>
 (function(){
-  var D = { "period": {"label": "01 to 30 Sep 2026","days": 30 }, "outcome": {"all": { "go": 268, "gac": 63, "stop": 17, "total": 348},"alone": { "go": 119, "gac": 18, "stop": 4, "total": 141},"accompanied": { "go": 149, "gac": 45, "stop": 13, "total": 207} }, "submitted": {"all": 348,"alone": 141,"accompanied": 207 }, "companies": {"alone": [ {"name": "Company A","go": 41,"gac": 4,"stop": 0,"total": 45,"detection": 8.9 }, {"name": "Company B","go": 26,"gac": 5,"stop": 2,"total": 33,"detection": 21.2 }, {"name": "Company C","go": 21,"gac": 4,"stop": 1,"total": 26,"detection": 19.2 }, {"name": "Company D","go": 18,"gac": 3,"stop": 1,"total": 22,"detection": 18.2 }, {"name": "Company E","go": 13,"gac": 2,"stop": 0,"total": 15,"detection": 13.3 }],"accompanied": [ {"name": "Company A","go": 55,"gac": 10,"stop": 2,"total": 67,"detection": 17.9 }, {"name": "Company B","go": 35,"gac": 14,"stop": 4,"total": 53,"detection": 34.0 }, {"name": "Company C","go": 27,"gac": 10,"stop": 4,"total": 41,"detection": 34.1 }, {"name": "Company D","go": 21,"gac": 8,"stop": 2,"total": 31,"detection": 32.3 }, {"name": "Company E","go": 11,"gac": 3,"stop": 1,"total": 15,"detection": 26.7 }],"all": [ {"name": "Company A","go": 96,"gac": 14,"stop": 2,"total": 112,"detection": 14.3 }, {"name": "Company B","go": 61,"gac": 19,"stop": 6,"total": 86,"detection": 29.1 }, {"name": "Company C","go": 48,"gac": 14,"stop": 5,"total": 67,"detection": 28.4 }, {"name": "Company D","go": 39,"gac": 11,"stop": 3,"total": 53,"detection": 26.4 }, {"name": "Company E","go": 24,"gac": 5,"stop": 1,"total": 30,"detection": 20.0 }] }, "sites": {"alone": [ {"name": "Site 1 (Depot)","go": 39,"gac": 5,"stop": 1,"total": 45,"detection": 13.3 }, {"name": "Site 2 (Terminal)","go": 33,"gac": 6,"stop": 2,"total": 41,"detection": 19.5 }, {"name": "Site 3 (Plant)","go": 27,"gac": 4,"stop": 1,"total": 32,"detection": 15.6 }, {"name": "Site 4 (Field)","go": 20,"gac": 3,"stop": 0,"total": 23,"detection": 13.0 }],"accompanied": [ {"name": "Site 1 (Depot)","go": 49,"gac": 12,"stop": 3,"total": 64,"detection": 23.4 }, {"name": "Site 2 (Terminal)","go": 41,"gac": 15,"stop": 5,"total": 61,"detection": 32.8 }, {"name": "Site 3 (Plant)","go": 34,"gac": 11,"stop": 3,"total": 48,"detection": 29.2 }, {"name": "Site 4 (Field)","go": 25,"gac": 7,"stop": 2,"total": 34,"detection": 26.5 }],"all": [ {"name": "Site 1 (Depot)","go": 88,"gac": 17,"stop": 4,"total": 109,"detection": 19.3 }, {"name": "Site 2 (Terminal)","go": 74,"gac": 21,"stop": 7,"total": 102,"detection": 27.5 }, {"name": "Site 3 (Plant)","go": 61,"gac": 15,"stop": 4,"total": 80,"detection": 23.8 }, {"name": "Site 4 (Field)","go": 45,"gac": 10,"stop": 2,"total": 57,"detection": 21.1 }] }, "workspaces": {"alone": [ {"name": "Workspace A","go": 90,"gac": 12,"stop": 2,"total": 104,"detection": 13.5 }, {"name": "Workspace B","go": 29,"gac": 6,"stop": 2,"total": 37,"detection": 21.6 }],"accompanied": [ {"name": "Workspace A","go": 111,"gac": 32,"stop": 9,"total": 152,"detection": 27.0 }, {"name": "Workspace B","go": 38,"gac": 13,"stop": 4,"total": 55,"detection": 30.9 }],"all": [ {"name": "Workspace A","go": 201,"gac": 44,"stop": 11,"total": 256,"detection": 21.5 }, {"name": "Workspace B","go": 67,"gac": 19,"stop": 6,"total": 92,"detection": 27.2 }] }, "entry": {"alone": { "start": 112, "already_started": 9, "standalone": 20},"accompanied": { "start": 177, "already_started": 13, "standalone": 17},"all": { "start": 289, "already_started": 22, "standalone": 37} }, "permit": {"alone": { "epermit": 90, "paper": 22},"accompanied": { "epermit": 141, "paper": 36},"all": { "epermit": 231, "paper": 58} }, "funnel": {"alone": { "self": 18, "initiator": 0, "maintained": 4, "raised": 22},"accompanied": { "self": 38, "initiator": 7, "maintained": 13, "raised": 58},"all": { "self": 56, "initiator": 7, "maintained": 17, "raised": 80} }, "actions": {"alone": { "total": 18, "photo": 9, "written": 15},"accompanied": { "total": 45, "photo": 25, "written": 36},"all": { "total": 63, "photo": 34, "written": 51} }, "pjb_substance": {"Attestation only, nothing written": 128,"Partly written": 34,"All four fields written": 45 }, "initiator": {"escalated": 20,"overridden": 7,"upheld": 13 }, "initiators": [{ "name": "Initiator A", "escalated": 9, "overrides": 3, "rate": 33.3},{ "name": "Initiator B", "escalated": 4, "overrides": 2, "rate": 50.0},{ "name": "Initiator C", "escalated": 3, "overrides": 1, "rate": 33.3},{ "name": "Initiator D", "escalated": 4, "overrides": 1, "rate": 25.0} ], "categories": {"alone": [ {"name": "Equipment or tool defect","self": 4,"initiator": 0,"maintained": 1,"total": 5,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 3,"initiator": 0,"maintained": 0,"total": 3,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 2,"initiator": 0,"maintained": 1,"total": 3,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 1,"initiator": 0,"maintained": 1,"total": 2,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 2,"initiator": 0,"maintained": 0,"total": 2,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }],"accompanied": [ {"name": "Equipment or tool defect","self": 8,"initiator": 2,"maintained": 2,"total": 12,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 6,"initiator": 1,"maintained": 3,"total": 10,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 7,"initiator": 1,"maintained": 1,"total": 9,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 4,"initiator": 1,"maintained": 2,"total": 7,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 3,"initiator": 0,"maintained": 3,"total": 6,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 3,"initiator": 1,"maintained": 0,"total": 4,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 2,"initiator": 0,"maintained": 1,"total": 3,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 1,"initiator": 1,"maintained": 0,"total": 2,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }, {"name": "Other, uncategorised","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0733","example": "Task scope differs from what was briefed","action": "Scope confirmed with the supervisor before start" }],"all": [ {"name": "Equipment or tool defect","self": 12,"initiator": 2,"maintained": 3,"total": 17,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 9,"initiator": 1,"maintained": 4,"total": 14,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 10,"initiator": 1,"maintained": 1,"total": 12,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 6,"initiator": 1,"maintained": 3,"total": 10,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 4,"initiator": 0,"maintained": 4,"total": 8,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 5,"initiator": 1,"maintained": 0,"total": 6,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 4,"initiator": 0,"maintained": 1,"total": 5,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 2,"initiator": 1,"maintained": 0,"total": 3,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }, {"name": "Other, uncategorised","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0733","example": "Task scope differs from what was briefed","action": "Scope confirmed with the supervisor before start" }] }, "top_n": 10, "daily": {"alone": { "go": [4,5,5,6,5,5,2,4,6,5,5,3,4,3,4,4,2,3,3,5,5,3,5,3,4,3,2,5,3,3 ], "gac": [1,1,0,1,1,1,0,1,1,1,1,0,1,0,0,0,0,1,0,1,1,0,1,1,0,1,1,0,1,0 ], "stop": [0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0 ]},"accompanied": { "go": [5,4,4,4,3,4,6,7,4,3,7,5,5,4,6,7,5,5,3,7,3,5,7,3,6,7,6,6,3,5 ], "gac": [1,2,1,1,2,2,2,1,1,2,1,1,1,1,1,2,2,2,1,1,1,1,2,2,1,2,2,2,2,2 ], "stop": [0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,1,0,1,1,1,1,1,0,0 ]},"all": { "go": [9,9,9,10,8,9,8,11,10,8,12,8,9,7,10,11,7,8,6,12,8,8,12,6,10,10,8,11,6,8 ], "gac": [2,3,1,2,3,3,2,2,2,3,2,1,2,1,1,2,2,3,1,2,2,1,3,3,1,3,3,2,3,2 ], "stop": [0,1,0,0,1,1,0,1,0,1,0,0,1,1,0,1,0,1,0,0,1,1,0,2,1,1,1,1,0,0 ]} }, "daily_labels": ["01 Sep","02 Sep","03 Sep","04 Sep","05 Sep","06 Sep","07 Sep","08 Sep","09 Sep","10 Sep","11 Sep","12 Sep","13 Sep","14 Sep","15 Sep","16 Sep","17 Sep","18 Sep","19 Sep","20 Sep","21 Sep","22 Sep","23 Sep","24 Sep","25 Sep","26 Sep","27 Sep","28 Sep","29 Sep","30 Sep" ], "permit_daily": {"epermit": [ 8, 10, 7, 8, 8, 8, 6, 9, 8, 7, 9, 6, 7, 5, 7, 9, 6, 8, 4, 10, 8, 7, 10, 7, 8, 10, 8, 10, 6, 7],"paper": [ 1, 1, 1, 2, 2, 3, 2, 3, 2, 3, 3, 2, 3, 2, 2, 3, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1] }, "hse": {"submitted": 212,"good": 128,"anom": 84,"daily": { "good": [4,4,3,4,1,3,5,3,6,3,4,5,3,4,9,4,4,4,5,5,6,6,4,4,2,2,4,6,5,6 ], "anom": [3,2,5,2,2,2,4,2,2,3,4,2,2,4,4,3,2,3,3,1,4,3,2,5,3,2,2,3,3,2 ]},"entry": { "during": 97, "standalone": 115},"actions": { "with_action": 61},"stopcard": { "used": 37, "daily": [1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,1,1,1,1,1,2,1,1,2,1,1,1,1,1,1 ], "rules": [{ "name": "Risky situations", "anom": 26, "stop": 7},{ "name": "PPE", "anom": 21, "stop": 4},{ "name": "Body Mechanics & Tools", "anom": 18, "stop": 7},{ "name": "Work permit", "anom": 15, "stop": 5},{ "name": "Traffic", "anom": 14, "stop": 6},{ "name": "Work at height", "anom": 13, "stop": 6},{ "name": "Lifting operations", "anom": 11, "stop": 3},{ "name": "Line of danger", "anom": 10, "stop": 6},{ "name": "Energized Systems", "anom": 9, "stop": 2},{ "name": "Confined spaces", "anom": 8, "stop": 3},{ "name": "Hot works", "anom": 7, "stop": 2},{ "name": "Excavation work", "anom": 6, "stop": 2} ], "categories": [{ "name": "Health", "anom": 22, "stop": 7},{ "name": "Safety", "anom": 63, "stop": 32},{ "name": "Security", "anom": 19, "stop": 7},{ "name": "Environment", "anom": 16, "stop": 5} ], "companies": [{ "name": "Company A", "anom": 22, "stop": 10},{ "name": "Company B", "anom": 19, "stop": 8},{ "name": "Company C", "anom": 16, "stop": 7},{ "name": "Company D", "anom": 15, "stop": 7},{ "name": "Company E", "anom": 12, "stop": 5} ], "sites": [{ "name": "Site 1 (Depot)", "anom": 24, "stop": 11},{ "name": "Site 2 (Terminal)", "anom": 21, "stop": 9},{ "name": "Site 3 (Plant)", "anom": 22, "stop": 10},{ "name": "Site 4 (Field)", "anom": 17, "stop": 7} ], "workspaces": [{ "name": "Workspace A", "anom": 51, "stop": 22},{ "name": "Workspace B", "anom": 33, "stop": 15} ], "entry": {"anom_during": 41,"stop_during": 18 }, "actions": {"stop_with_action": 29 }},"rules": [ {"name": "Risky situations","anom": 26,"situations": { "rows": [{ "name": "Smoking or vaping outside the authorised areas", "anom": 7},{ "name": "Worker or driver under the influence of alcohol or drugs", "anom": 6},{ "name": "Degraded situation left unsecured and unreported", "anom": 5},{ "name": "Risks not identified before a non routine or complex operation", "anom": 4},{ "name": "Start and stop instructions for equipment not followed", "anom": 3} ], "unspecified": 3, "compliant": 4} }, {"name": "PPE","anom": 21,"situations": { "rows": [{ "name": "Helmet not worn in the required zone", "anom": 7},{ "name": "Eye protection missing", "anom": 6},{ "name": "Gloves not suited to the product handled", "anom": 5},{ "name": "Hearing protection not worn", "anom": 3} ], "unspecified": 2, "compliant": 3} }, {"name": "Body Mechanics & Tools","anom": 18,"situations": { "rows": [{ "name": "Manual handling beyond the allowed load", "anom": 5},{ "name": "Tool not suited to the task", "anom": 5},{ "name": "Damaged or modified tool kept in service", "anom": 4},{ "name": "Working posture at risk", "anom": 3} ], "unspecified": 2, "compliant": 3} }, {"name": "Work permit","anom": 15,"situations": { "rows": [{ "name": "Pre-job briefing not signed", "anom": 5},{ "name": "Safety Green Light not done", "anom": 5},{ "name": "No stop, risk reassessment or supervisor notification when conditions changed", "anom": 4} ], "unspecified": 2, "compliant": 2} }, {"name": "Traffic","anom": 14,"situations": { "rows": [{ "name": "Vehicle condition not checked before use", "anom": 2},{ "name": "Seatbelt not fastened", "anom": 2},{ "name": "Speeding or driving unsuited to road conditions", "anom": 2},{ "name": "Use of a communication device while driving", "anom": 2},{ "name": "Driving time or journey management plan not respected", "anom": 2},{ "name": "Pedestrian or cyclist traveling outside designated routes", "anom": 2},{ "name": "Handrail not held when taking the stairs", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Work at height","anom": 13,"situations": { "rows": [{ "name": "Harness not clipped", "anom": 4},{ "name": "Guardrail missing or incomplete", "anom": 4},{ "name": "Ladder used as a work platform", "anom": 3},{ "name": "Tools not secured against dropping", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Lifting operations","anom": 11,"situations": { "rows": [{ "name": "Load passing over people", "anom": 3},{ "name": "Sling or accessory not checked", "anom": 3},{ "name": "Exclusion zone not marked", "anom": 2},{ "name": "Lifting plan missing", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Line of danger","anom": 10,"situations": { "rows": [{ "name": "Positioned in the path of a pressure release", "anom": 3},{ "name": "Positioned in the path of a dropped object", "anom": 2},{ "name": "No safety barriers or exclusion zones", "anom": 2},{ "name": "Loose objects not secured", "anom": 1},{ "name": "No respect of safety barriers or exclusion zones", "anom": 1} ], "unspecified": 1, "compliant": 2} }, {"name": "Energized Systems","anom": 9,"situations": { "rows": [{ "name": "Isolation not verified before work", "anom": 3},{ "name": "Lock out tag out not applied", "anom": 3},{ "name": "Stored energy not released", "anom": 2},{ "name": "Live work without authorisation", "anom": 1} ], "unspecified": 1, "compliant": 1} }, {"name": "Confined spaces","anom": 8,"situations": { "rows": [{ "name": "No permit and/or confined-space entry certificate", "anom": 1},{ "name": "No verification of isolation from energy and/or fluid sources", "anom": 1},{ "name": "No respiratory protection when required", "anom": 1},{ "name": "No rescue plan", "anom": 1},{ "name": "Atmosphere not tested prior to intervention", "anom": 1},{ "name": "No atmosphere monitoring", "anom": 1},{ "name": "No entry/exit supervision", "anom": 1},{ "name": "Unauthorized entry", "anom": 1} ], "unspecified": 1, "compliant": 1} }, {"name": "Hot works","anom": 7,"situations": { "rows": [{ "name": "No hot work permit", "anom": 2},{ "name": "Flammable substance or ignition source nearby", "anom": 1},{ "name": "No written authorization before starting hot work", "anom": 1},{ "name": "Gas test not performed in the hazardous area", "anom": 1},{ "name": "No continuous gas monitoring in the hazardous area", "anom": 1} ], "unspecified": 1, "compliant": 1} }, {"name": "Excavation work","anom": 6,"situations": { "rows": [{ "name": "No safe access when the excavation is deeper than 1.3 m (4 ft)", "anom": 2},{ "name": "No shoring or sloping of the walls", "anom": 1},{ "name": "Underground networks not located before digging", "anom": 1},{ "name": "Spoil stored at the edge of the excavation", "anom": 1} ], "unspecified": 1, "compliant": 1} }],"categories": [ {"name": "Health","good": 41,"anom": 22,"total": 63 }, {"name": "Safety","good": 96,"anom": 63,"total": 159 }, {"name": "Security","good": 33,"anom": 19,"total": 52 }, {"name": "Environment","good": 28,"anom": 16,"total": 44 }],"companies": [ {"name": "Company A","good": 38,"anom": 22,"total": 60 }, {"name": "Company B","good": 29,"anom": 19,"total": 48 }, {"name": "Company C","good": 27,"anom": 16,"total": 43 }, {"name": "Company D","good": 23,"anom": 15,"total": 38 }, {"name": "Company E","good": 11,"anom": 12,"total": 23 }],"sites": [ {"name": "Site 1 (Depot)","good": 41,"anom": 24,"total": 65 }, {"name": "Site 2 (Terminal)","good": 34,"anom": 21,"total": 55 }, {"name": "Site 3 (Plant)","good": 30,"anom": 22,"total": 52 }, {"name": "Site 4 (Field)","good": 23,"anom": 17,"total": 40 }],"workspaces": [ {"name": "Workspace A","good": 86,"anom": 51,"total": 137 }, {"name": "Workspace B","good": 42,"anom": 33,"total": 75 }] }};
+  var D = { "period": {"label": "01 to 30 Sep 2026","days": 30 }, "outcome": {"all": { "go": 268, "gac": 63, "stop": 17, "total": 348},"alone": { "go": 119, "gac": 18, "stop": 4, "total": 141},"accompanied": { "go": 149, "gac": 45, "stop": 13, "total": 207} }, "submitted": {"all": 348,"alone": 141,"accompanied": 207 }, "companies": {"alone": [ {"name": "Company A","go": 41,"gac": 4,"stop": 0,"total": 45,"detection": 8.9 }, {"name": "Company B","go": 26,"gac": 5,"stop": 2,"total": 33,"detection": 21.2 }, {"name": "Company C","go": 21,"gac": 4,"stop": 1,"total": 26,"detection": 19.2 }, {"name": "Company D","go": 18,"gac": 3,"stop": 1,"total": 22,"detection": 18.2 }, {"name": "Company E","go": 13,"gac": 2,"stop": 0,"total": 15,"detection": 13.3 }],"accompanied": [ {"name": "Company A","go": 55,"gac": 10,"stop": 2,"total": 67,"detection": 17.9 }, {"name": "Company B","go": 35,"gac": 14,"stop": 4,"total": 53,"detection": 34.0 }, {"name": "Company C","go": 27,"gac": 10,"stop": 4,"total": 41,"detection": 34.1 }, {"name": "Company D","go": 21,"gac": 8,"stop": 2,"total": 31,"detection": 32.3 }, {"name": "Company E","go": 11,"gac": 3,"stop": 1,"total": 15,"detection": 26.7 }],"all": [ {"name": "Company A","go": 96,"gac": 14,"stop": 2,"total": 112,"detection": 14.3 }, {"name": "Company B","go": 61,"gac": 19,"stop": 6,"total": 86,"detection": 29.1 }, {"name": "Company C","go": 48,"gac": 14,"stop": 5,"total": 67,"detection": 28.4 }, {"name": "Company D","go": 39,"gac": 11,"stop": 3,"total": 53,"detection": 26.4 }, {"name": "Company E","go": 24,"gac": 5,"stop": 1,"total": 30,"detection": 20.0 }] }, "sites": {"alone": [ {"name": "Site 1 (Depot)","go": 39,"gac": 5,"stop": 1,"total": 45,"detection": 13.3 }, {"name": "Site 2 (Terminal)","go": 33,"gac": 6,"stop": 2,"total": 41,"detection": 19.5 }, {"name": "Site 3 (Plant)","go": 27,"gac": 4,"stop": 1,"total": 32,"detection": 15.6 }, {"name": "Site 4 (Field)","go": 20,"gac": 3,"stop": 0,"total": 23,"detection": 13.0 }],"accompanied": [ {"name": "Site 1 (Depot)","go": 49,"gac": 12,"stop": 3,"total": 64,"detection": 23.4 }, {"name": "Site 2 (Terminal)","go": 41,"gac": 15,"stop": 5,"total": 61,"detection": 32.8 }, {"name": "Site 3 (Plant)","go": 34,"gac": 11,"stop": 3,"total": 48,"detection": 29.2 }, {"name": "Site 4 (Field)","go": 25,"gac": 7,"stop": 2,"total": 34,"detection": 26.5 }],"all": [ {"name": "Site 1 (Depot)","go": 88,"gac": 17,"stop": 4,"total": 109,"detection": 19.3 }, {"name": "Site 2 (Terminal)","go": 74,"gac": 21,"stop": 7,"total": 102,"detection": 27.5 }, {"name": "Site 3 (Plant)","go": 61,"gac": 15,"stop": 4,"total": 80,"detection": 23.8 }, {"name": "Site 4 (Field)","go": 45,"gac": 10,"stop": 2,"total": 57,"detection": 21.1 }] }, "workspaces": {"alone": [ {"name": "Workspace A","go": 90,"gac": 12,"stop": 2,"total": 104,"detection": 13.5 }, {"name": "Workspace B","go": 29,"gac": 6,"stop": 2,"total": 37,"detection": 21.6 }],"accompanied": [ {"name": "Workspace A","go": 111,"gac": 32,"stop": 9,"total": 152,"detection": 27.0 }, {"name": "Workspace B","go": 38,"gac": 13,"stop": 4,"total": 55,"detection": 30.9 }],"all": [ {"name": "Workspace A","go": 201,"gac": 44,"stop": 11,"total": 256,"detection": 21.5 }, {"name": "Workspace B","go": 67,"gac": 19,"stop": 6,"total": 92,"detection": 27.2 }] }, "entry": {"alone": { "start": 112, "already_started": 9, "standalone": 20},"accompanied": { "start": 177, "already_started": 13, "standalone": 17},"all": { "start": 289, "already_started": 22, "standalone": 37} }, "permit": {"alone": { "epermit": 90, "paper": 22},"accompanied": { "epermit": 141, "paper": 36},"all": { "epermit": 231, "paper": 58} }, "funnel": {"alone": { "self": 18, "initiator": 0, "maintained": 4, "raised": 22},"accompanied": { "self": 38, "initiator": 7, "maintained": 13, "raised": 58},"all": { "self": 56, "initiator": 7, "maintained": 17, "raised": 80} }, "actions": {"alone": { "total": 18, "photo": 9, "written": 15},"accompanied": { "total": 45, "photo": 25, "written": 36},"all": { "total": 63, "photo": 34, "written": 51} }, "pjb_substance": {"Attestation only, nothing written": 128,"Partly written": 34,"All four fields written": 45 }, "initiator": {"escalated": 20,"overridden": 7,"upheld": 13 }, "initiators": [{ "name": "Initiator A", "escalated": 9, "overrides": 3, "rate": 33.3},{ "name": "Initiator B", "escalated": 4, "overrides": 2, "rate": 50.0},{ "name": "Initiator C", "escalated": 3, "overrides": 1, "rate": 33.3},{ "name": "Initiator D", "escalated": 4, "overrides": 1, "rate": 25.0} ], "categories": {"alone": [ {"name": "Equipment or tool defect","self": 4,"initiator": 0,"maintained": 1,"total": 5,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 3,"initiator": 0,"maintained": 0,"total": 3,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 2,"initiator": 0,"maintained": 1,"total": 3,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 1,"initiator": 0,"maintained": 1,"total": 2,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 2,"initiator": 0,"maintained": 0,"total": 2,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }],"accompanied": [ {"name": "Equipment or tool defect","self": 8,"initiator": 2,"maintained": 2,"total": 12,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 6,"initiator": 1,"maintained": 3,"total": 10,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 7,"initiator": 1,"maintained": 1,"total": 9,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 4,"initiator": 1,"maintained": 2,"total": 7,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 3,"initiator": 0,"maintained": 3,"total": 6,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 3,"initiator": 1,"maintained": 0,"total": 4,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 2,"initiator": 0,"maintained": 1,"total": 3,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 1,"initiator": 1,"maintained": 0,"total": 2,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }, {"name": "Other, uncategorised","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0733","example": "Task scope differs from what was briefed","action": "Scope confirmed with the supervisor before start" }],"all": [ {"name": "Equipment or tool defect","self": 12,"initiator": 2,"maintained": 3,"total": 17,"ref": "PJB-2026-0400","example": "Gas detector past its calibration date","action": "Replaced with a calibrated unit from the store" }, {"name": "Access or work area not secured","self": 9,"initiator": 1,"maintained": 4,"total": 14,"ref": "PJB-2026-0437","example": "Ladder footing unstable on loose gravel","action": "Repositioned on a steel plate, second person footing the ladder" }, {"name": "Missing or wrong PPE","self": 10,"initiator": 1,"maintained": 1,"total": 12,"ref": "PJB-2026-0474","example": "Two crew members without cut-resistant gloves","action": "Gloves collected from the store before start" }, {"name": "Energy isolation not confirmed","self": 6,"initiator": 1,"maintained": 3,"total": 10,"ref": "PJB-2026-0511","example": "Pump isolation not confirmed on the line","action": "Isolation verified with the control room, lock applied" }, {"name": "Weather or ground conditions","self": 4,"initiator": 0,"maintained": 4,"total": 8,"ref": "PJB-2026-0548","example": "Access road washed out after overnight rain","action": "Alternative access route used" }, {"name": "Lighting insufficient","self": 5,"initiator": 1,"maintained": 0,"total": 6,"ref": "PJB-2026-0585","example": "Lighting insufficient in the work area","action": "Portable lighting installed" }, {"name": "Adjacent activity not coordinated","self": 4,"initiator": 0,"maintained": 1,"total": 5,"ref": "PJB-2026-0622","example": "Adjacent hot work in progress with no barrier in place","action": "Hot work paused and a barrier installed before start" }, {"name": "Labelling or documentation mismatch","self": 3,"initiator": 0,"maintained": 1,"total": 4,"ref": "PJB-2026-0659","example": "Valve labelling does not match the isolation drawing","action": "Line identified with the control room and re-tagged" }, {"name": "Gas or atmosphere check missing","self": 2,"initiator": 1,"maintained": 0,"total": 3,"ref": "PJB-2026-0696","example": "Atmosphere not tested before entry","action": "Reading taken and logged before entry" }, {"name": "Other, uncategorised","self": 1,"initiator": 0,"maintained": 0,"total": 1,"ref": "PJB-2026-0733","example": "Task scope differs from what was briefed","action": "Scope confirmed with the supervisor before start" }] }, "top_n": 10, "daily": {"alone": { "go": [4,5,5,6,5,5,2,4,6,5,5,3,4,3,4,4,2,3,3,5,5,3,5,3,4,3,2,5,3,3 ], "gac": [1,1,0,1,1,1,0,1,1,1,1,0,1,0,0,0,0,1,0,1,1,0,1,1,0,1,1,0,1,0 ], "stop": [0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0 ]},"accompanied": { "go": [5,4,4,4,3,4,6,7,4,3,7,5,5,4,6,7,5,5,3,7,3,5,7,3,6,7,6,6,3,5 ], "gac": [1,2,1,1,2,2,2,1,1,2,1,1,1,1,1,2,2,2,1,1,1,1,2,2,1,2,2,2,2,2 ], "stop": [0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,1,0,1,1,1,1,1,0,0 ]},"all": { "go": [9,9,9,10,8,9,8,11,10,8,12,8,9,7,10,11,7,8,6,12,8,8,12,6,10,10,8,11,6,8 ], "gac": [2,3,1,2,3,3,2,2,2,3,2,1,2,1,1,2,2,3,1,2,2,1,3,3,1,3,3,2,3,2 ], "stop": [0,1,0,0,1,1,0,1,0,1,0,0,1,1,0,1,0,1,0,0,1,1,0,2,1,1,1,1,0,0 ]} }, "daily_labels": ["01 Sep","02 Sep","03 Sep","04 Sep","05 Sep","06 Sep","07 Sep","08 Sep","09 Sep","10 Sep","11 Sep","12 Sep","13 Sep","14 Sep","15 Sep","16 Sep","17 Sep","18 Sep","19 Sep","20 Sep","21 Sep","22 Sep","23 Sep","24 Sep","25 Sep","26 Sep","27 Sep","28 Sep","29 Sep","30 Sep" ], "permit_daily": {"epermit": [ 8, 10, 7, 8, 8, 8, 6, 9, 8, 7, 9, 6, 7, 5, 7, 9, 6, 8, 4, 10, 8, 7, 10, 7, 8, 10, 8, 10, 6, 7],"paper": [ 1, 1, 1, 2, 2, 3, 2, 3, 2, 3, 3, 2, 3, 2, 2, 3, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1] }, "hse": {"submitted": 212,"good": 128,"anom": 84,"daily": { "good": [4,4,3,4,1,3,5,3,6,3,4,5,3,4,9,4,4,4,5,5,6,6,4,4,2,2,4,6,5,6 ], "anom": [3,2,5,2,2,2,4,2,2,3,4,2,2,4,4,3,2,3,3,1,4,3,2,5,3,2,2,3,3,2 ]},"entry": { "during": 97, "standalone": 115},"actions": { "with_action": 61},"stopcard": { "used": 37, "daily": [1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,1,1,1,1,1,2,1,1,2,1,1,1,1,1,1 ], "rules": [{ "name": "Risky situations", "anom": 26, "stop": 7},{ "name": "Traffic", "anom": 14, "stop": 3},{ "name": "Body Mechanics & Tools", "anom": 18, "stop": 7},{ "name": "PPE", "anom": 9, "stop": 3},{ "name": "Work permit", "anom": 7, "stop": 3},{ "name": "Lifting operations", "anom": 11, "stop": 5},{ "name": "Energized Systems", "anom": 15, "stop": 4},{ "name": "Confined spaces", "anom": 8, "stop": 5},{ "name": "Excavation work", "anom": 10, "stop": 2},{ "name": "Work at height", "anom": 21, "stop": 8},{ "name": "Hot works", "anom": 13, "stop": 4},{ "name": "Line of danger", "anom": 6, "stop": 2} ], "categories": [{ "name": "Health", "anom": 22, "stop": 7},{ "name": "Safety", "anom": 63, "stop": 32},{ "name": "Security", "anom": 19, "stop": 7},{ "name": "Environment", "anom": 16, "stop": 5} ], "companies": [{ "name": "Company A", "anom": 22, "stop": 10},{ "name": "Company B", "anom": 19, "stop": 8},{ "name": "Company C", "anom": 16, "stop": 7},{ "name": "Company D", "anom": 15, "stop": 7},{ "name": "Company E", "anom": 12, "stop": 5} ], "sites": [{ "name": "Site 1 (Depot)", "anom": 24, "stop": 11},{ "name": "Site 2 (Terminal)", "anom": 21, "stop": 9},{ "name": "Site 3 (Plant)", "anom": 22, "stop": 10},{ "name": "Site 4 (Field)", "anom": 17, "stop": 7} ], "workspaces": [{ "name": "Workspace A", "anom": 51, "stop": 22},{ "name": "Workspace B", "anom": 33, "stop": 15} ], "entry": {"anom_during": 41,"stop_during": 18 }, "actions": {"stop_with_action": 29 }},"rules": [ {"name": "Risky situations","anom": 26,"situations": { "rows": [{ "name": "Smoking or vaping outside the authorised areas", "anom": 7},{ "name": "Worker or driver under the influence of alcohol or drugs", "anom": 6},{ "name": "Degraded situation left unsecured and unreported", "anom": 5},{ "name": "Risks not identified before a non routine or complex operation", "anom": 4},{ "name": "Start and stop instructions for equipment not followed", "anom": 3} ], "unspecified": 3, "compliant": 4} }, {"name": "Traffic","anom": 14,"situations": { "rows": [{ "name": "Vehicle condition not checked before use", "anom": 2},{ "name": "Seatbelt not fastened", "anom": 2},{ "name": "Speeding or driving unsuited to road conditions", "anom": 2},{ "name": "Use of a communication device while driving", "anom": 2},{ "name": "Driving time or journey management plan not respected", "anom": 2},{ "name": "Pedestrian or cyclist traveling outside designated routes", "anom": 2},{ "name": "Handrail not held when taking the stairs", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Body Mechanics & Tools","anom": 18,"situations": { "rows": [{ "name": "Manual handling beyond the allowed load", "anom": 5},{ "name": "Tool not suited to the task", "anom": 5},{ "name": "Damaged or modified tool kept in service", "anom": 4},{ "name": "Working posture at risk", "anom": 3} ], "unspecified": 2, "compliant": 3} }, {"name": "PPE","anom": 9,"situations": { "rows": [{ "name": "Helmet not worn in the required zone", "anom": 3},{ "name": "Eye protection missing", "anom": 3},{ "name": "Gloves not suited to the product handled", "anom": 2},{ "name": "Hearing protection not worn", "anom": 1} ], "unspecified": 1, "compliant": 1} }, {"name": "Work permit","anom": 7,"situations": { "rows": [{ "name": "Pre-job briefing not signed", "anom": 2},{ "name": "Safety Green Light not done", "anom": 2},{ "name": "No stop, risk reassessment or supervisor notification when conditions changed", "anom": 2} ], "unspecified": 1, "compliant": 1} }, {"name": "Lifting operations","anom": 11,"situations": { "rows": [{ "name": "Load passing over people", "anom": 3},{ "name": "Sling or accessory not checked", "anom": 3},{ "name": "Exclusion zone not marked", "anom": 2},{ "name": "Lifting plan missing", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Energized Systems","anom": 15,"situations": { "rows": [{ "name": "Isolation not verified before work", "anom": 5},{ "name": "Lock out tag out not applied", "anom": 4},{ "name": "Stored energy not released", "anom": 3},{ "name": "Live work without authorisation", "anom": 2} ], "unspecified": 2, "compliant": 2} }, {"name": "Confined spaces","anom": 8,"situations": { "rows": [{ "name": "No permit and/or confined-space entry certificate", "anom": 1},{ "name": "No verification of isolation from energy and/or fluid sources", "anom": 1},{ "name": "No respiratory protection when required", "anom": 1},{ "name": "No rescue plan", "anom": 1},{ "name": "Atmosphere not tested prior to intervention", "anom": 1},{ "name": "No atmosphere monitoring", "anom": 1},{ "name": "No entry/exit supervision", "anom": 1},{ "name": "Unauthorized entry", "anom": 1} ], "unspecified": 1, "compliant": 1} }, {"name": "Excavation work","anom": 10,"situations": { "rows": [{ "name": "No safe access when the excavation is deeper than 1.3 m (4 ft)", "anom": 3},{ "name": "No shoring or sloping of the walls", "anom": 3},{ "name": "Underground networks not located before digging", "anom": 2},{ "name": "Spoil stored at the edge of the excavation", "anom": 1} ], "unspecified": 1, "compliant": 2} }, {"name": "Work at height","anom": 21,"situations": { "rows": [{ "name": "Harness not clipped", "anom": 7},{ "name": "Guardrail missing or incomplete", "anom": 6},{ "name": "Ladder used as a work platform", "anom": 5},{ "name": "Tools not secured against dropping", "anom": 3} ], "unspecified": 2, "compliant": 3} }, {"name": "Hot works","anom": 13,"situations": { "rows": [{ "name": "No hot work permit", "anom": 4},{ "name": "Flammable substance or ignition source nearby", "anom": 3},{ "name": "No written authorization before starting hot work", "anom": 2},{ "name": "Gas test not performed in the hazardous area", "anom": 2},{ "name": "No continuous gas monitoring in the hazardous area", "anom": 2} ], "unspecified": 1, "compliant": 2} }, {"name": "Line of danger","anom": 6,"situations": { "rows": [{ "name": "Positioned in the path of a pressure release", "anom": 1},{ "name": "Positioned in the path of a dropped object", "anom": 1},{ "name": "No safety barriers or exclusion zones", "anom": 1},{ "name": "Loose objects not secured", "anom": 1},{ "name": "No respect of safety barriers or exclusion zones", "anom": 1} ], "unspecified": 1, "compliant": 1} }],"categories": [ {"name": "Health","good": 41,"anom": 22,"total": 63 }, {"name": "Safety","good": 96,"anom": 63,"total": 159 }, {"name": "Security","good": 33,"anom": 19,"total": 52 }, {"name": "Environment","good": 28,"anom": 16,"total": 44 }],"companies": [ {"name": "Company A","good": 38,"anom": 22,"total": 60 }, {"name": "Company B","good": 29,"anom": 19,"total": 48 }, {"name": "Company C","good": 27,"anom": 16,"total": 43 }, {"name": "Company D","good": 23,"anom": 15,"total": 38 }, {"name": "Company E","good": 11,"anom": 12,"total": 23 }],"sites": [ {"name": "Site 1 (Depot)","good": 41,"anom": 24,"total": 65 }, {"name": "Site 2 (Terminal)","good": 34,"anom": 21,"total": 55 }, {"name": "Site 3 (Plant)","good": 30,"anom": 22,"total": 52 }, {"name": "Site 4 (Field)","good": 23,"anom": 17,"total": 40 }],"workspaces": [ {"name": "Workspace A","good": 86,"anom": 51,"total": 137 }, {"name": "Workspace B","good": 42,"anom": 33,"total": 75 }] }};
   var $ = function(id){ return document.getElementById(id); };
   var css = function(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); };
   var pct = function(a,b){ return b ? Math.round(a/b*1000)/10 : 0; };
@@ -610,6 +610,47 @@
     return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
   }
   function onColour(bg){ return lum(bg) > 0.25 ? '#1f2a30' : '#fff'; }
+  /* one pictogram per observation category, drawn at the same stroke weight as the golden
+     rule pictograms. Paths only, on a 24 by 24 grid, so the same glyph serves the ring, the
+     list and any size without a second file */
+  var CATICON = {
+    Safety:['M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5',
+            'M14 6a6 6 0 0 1 6 6v3', 'M4 15v-3a6 6 0 0 1 6-6',
+            'M3 15h18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z'],
+    Health:['M12 20.5S3.5 15.6 3.5 9.6A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.5 2.6c0 6-8.5 10.9-8.5 10.9z',
+            'M6.5 12.5h3l1.5-2.5 2 4.5 1.5-2h3'],
+    Security:['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', 'M9 12l2 2 4-4'],
+    Environment:['M12 21v-9', 'M12 12.5C12 8.5 9 6 4.5 6c0 4 3 6.5 7.5 6.5z',
+                 'M12 10c0-3.3 2.6-5.5 7-5.5 0 3.3-2.6 5.5-7 5.5z', 'M8 21h8']
+  };
+
+  /* each drawing fills its own part of the 24 by 24 grid: a helmet sits low on its brim, a
+     shield reaches the top. Centring the box therefore does not centre the ink, so every
+     glyph carries the shift that puts its own ink box on the middle */
+  var CATNUDGE = { Safety:[0, 0], Health:[0, 0], Security:[0, 0], Environment:[0, 0] };
+  /* an svg element for the ring, where the glyph is placed and scaled by hand */
+  function catGlyph(name, x, y, size, colour){
+    var d = CATICON[name]; if (!d) return null;
+    var k = size / 24;
+    var g = el('g', { transform:'translate(' + (x - size / 2) + ',' + (y - size / 2) + ') scale(' + k + ')',
+                      fill:'none', stroke:colour, 'stroke-width':1.8 / k * (k / k),
+                      'stroke-linecap':'round', 'stroke-linejoin':'round' });
+    g.setAttribute('stroke-width', 2.2);
+    var n = CATNUDGE[name] || [0, 0];
+    var inner = el('g', { transform:'translate(' + n[0] + ',' + n[1] + ')' });
+    d.forEach(function(p){ inner.appendChild(el('path', { d:p })); });
+    g.appendChild(inner);
+    return g;
+  }
+  /* the same glyph as markup, for the list under the ring */
+  function catGlyphHTML(name, size, colour){
+    var d = CATICON[name]; if (!d) return '';
+    var n = CATNUDGE[name] || [0, 0];
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' +
+           colour + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+           '<g transform="translate(' + n[0] + ',' + n[1] + ')">' +
+           d.map(function(p){ return '<path d="' + p + '"/>'; }).join('') + '</g></svg>';
+  }
   var NS = 'http://www.w3.org/2000/svg';
   var mode = 'all', dim = 'companies', msr = 'volume', vol = 'volume';
   var cmpShow = { go:true, gac:true, stop:true };
@@ -710,11 +751,14 @@
     var hid = 'hx-' + (box.id || 'c');
     if (cfg.inset){
       var defs = el('defs', {});
-      var pat = el('pattern', { id:hid, width:10, height:10,
+      /* pitch 5 rather than 10: one stripe between every two, so the gaps close up and the
+         hatching reads as a texture instead of as a few painted bands. The stripe thins with
+         the pitch, since keeping 4.6 at this spacing would leave no orange between two */
+      var pat = el('pattern', { id:hid, width:5, height:5,
                                 patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
-      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:5,
                                    stroke:cfg.inset.hatch || cfg.inset.color,
-                                   'stroke-width':4.6 }));
+                                   'stroke-width':2.9 }));
       defs.appendChild(pat); svg.appendChild(defs);
     }
     tk.forEach(function(t){
@@ -775,7 +819,11 @@
     if (!box) return;
     var W = box.clientWidth || 600;
     var labelW = Math.min(Math.max(84, W * 0.36), 240);
-    var lines = cfg.categories.map(function(c){ return wrapText(c, Math.floor(labelW / 6.1)); });
+    /* a row label is normally one wrapped string; labelRows lets a chart give its own
+       lines, each with its own size, so a number can head a name written smaller */
+    var lines = cfg.categories.map(function(c, i){
+      return cfg.labelRows ? cfg.labelRows(i)
+           : wrapText(c, Math.floor(labelW / 6.1)).map(function(t){ return { t:t }; }); });
     var gap = 13;
     var minRow = (cfg.rowH || 32) * (cfg.grouped ? 1.35 : 1);
     var rows = cfg.categories.map(function(_, i){ return Math.max(minRow, lines[i].length * 14 + 12); });
@@ -793,30 +841,45 @@
     var hid = 'hx-' + (box.id || 'b');
     if (cfg.inset){
       var defs = el('defs', {});
-      var pat = el('pattern', { id:hid, width:10, height:10,
+      /* pitch 5 rather than 10: one stripe between every two, so the gaps close up and the
+         hatching reads as a texture instead of as a few painted bands. The stripe thins with
+         the pitch, since keeping 4.6 at this spacing would leave no orange between two */
+      var pat = el('pattern', { id:hid, width:5, height:5,
                                 patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
-      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:5,
                                    stroke:cfg.inset.hatch || cfg.inset.color,
-                                   'stroke-width':4.6 }));
+                                   'stroke-width':2.9 }));
       defs.appendChild(pat); svg.appendChild(defs);
     }
     var nS = cfg.series.length, grouped = !!cfg.grouped;
+    /* the same grid the charts over time carry, turned on its side: without it a horizontal
+       bar is read against nothing and two close lengths cannot be told apart. Drawn first,
+       so the bars sit over it rather than under it */
+    for (var g = 1; g <= 4; g++){
+      var gx = mL + (pw * g) / 4;
+      svg.appendChild(el('line', { x1:gx, x2:gx, y1:mT, y2:H - 10,
+                                   stroke:C.line2, 'stroke-width':1 }));
+    }
     var y = mT;
     cfg.categories.forEach(function(cat, i){
       var h = rows[i], bh = Math.min(26, h - 6), by = y + (h - bh) / 2, acc = 0;
+      /* the drawn label can be shorter than the row's full name, so the hover and the
+         screen reader get the long form while the axis keeps the short one */
+      var ttl = cfg.tipTitle ? cfg.tipTitle(i) : cat;
       var gh = grouped ? Math.max(5, (bh - 2 * (nS - 1)) / nS) : bh;
       if (cfg.onPick){
         var hit = el('rect', { x:0, y:y, width:W, height:h, fill:'transparent',
                                style:'cursor:pointer', role:'button', tabindex:'0',
-                               'aria-label':cat + ', open the detail' });
+                               'aria-label':ttl + ', open the detail' });
         hit.addEventListener('click', function(){ cfg.onPick(i); });
         hit.addEventListener('keydown', function(e){
           if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); cfg.onPick(i); } });
         svg.appendChild(hit);
       }
       lines[i].forEach(function(ln, k){
-        svg.appendChild(txt(labelW, y + (h - lines[i].length * 14) / 2 + 11 + k * 14, ln,
-                            { anchor:'end', fill:C.ink2, size:12 })); });
+        svg.appendChild(txt(labelW, y + (h - lines[i].length * 14) / 2 + 11 + k * 14, ln.t,
+                            { anchor:'end', fill:ln.fill || C.ink2,
+                              size:ln.size || 12, weight:ln.weight })); });
       cfg.series.forEach(function(s, si){
         var v = s.data[i]; if (!v){ acc += v; return; }
         var w = (v / max) * pw;
@@ -828,7 +891,7 @@
           r.addEventListener('click', function(){ cfg.onPick(i); }); }
         /* tipBody writes the whole body when a row needs its own wording rather than the
            series name and its value */
-        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' +
+        bindTip(r, '<strong>' + esc(ttl) + '</strong><br>' +
                    (cfg.tipBody ? cfg.tipBody(i)
                                 : esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>' +
                                   tipx(cfg, i, si, s)));
@@ -843,7 +906,7 @@
           var iw = Math.min((cfg.inset.data[i] / max) * pw, Math.max(1, w - gp));
           var ir = el('rect', { x:mL, y:by, width:Math.max(1, iw), height:bh,
                                 fill:'url(#' + hid + ')', rx:4, 'fill-opacity':1 });
-          bindTip(ir, '<strong>' + esc(cat) + '</strong><br>' +
+          bindTip(ir, '<strong>' + esc(ttl) + '</strong><br>' +
                       (cfg.tipBody ? cfg.tipBody(i)
                                    : esc(cfg.inset.name) + ': <b>' + cfg.inset.data[i] +
                                      '</b> of ' + v));
@@ -870,7 +933,9 @@
     var total = slices.reduce(function(a, s){ return a + s.v; }, 0);
     /* the ring always reserves room for an outside label, so two donuts side by side
        come out the same size whether or not one of them has a small slice */
-    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.62, a0 = -Math.PI / 2;
+    /* the band is wide enough to carry a pictogram over its share: at 0.62 of the outer
+       radius the glyph and the figure filled it edge to edge */
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.52, a0 = -Math.PI / 2;
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
     slices.forEach(function(s){
       if (!s.v) return;
@@ -903,7 +968,18 @@
       var fits = label.length * 6.7 * Math.abs(Math.cos(mid)) + 6 <= (R - r);
       if (s.v / total > 0.09 && fits){
         var lr = (R + r) / 2;
-        svg.appendChild(txt(cx + lr * Math.cos(mid), cy + lr * Math.sin(mid) + 4, label,
+        var lx = cx + lr * Math.cos(mid), ly = cy + lr * Math.sin(mid);
+        /* the pictogram sits above the share, both on the band's mid radius, and only when
+           the band is thick enough to carry the two without them touching its edges */
+        /* the pair is centred on the band as one block: the glyph's own height plus the gap
+           plus the cap height of the figure, so neither of them drifts towards an edge */
+        var gs = 23, gap = 2, cap = 9, blockH = gs + gap + cap;
+        /* the pictogram is white on every slice of both rings, settled. It is a mark, not a
+           label: the share under it keeps the contrast driven ink, and the category is named
+           in the list and in the hover, so nothing is carried by the white alone */
+        var gl = (R - r) >= 38 ? catGlyph(s.n, lx, ly - blockH / 2 + gs / 2, gs, '#fff') : null;
+        if (gl) svg.appendChild(gl);
+        svg.appendChild(txt(lx, gl ? ly + blockH / 2 : ly + 4, label,
                             { anchor:'middle', fill:onColour(s.c), weight:700, size:12 }));
       } else {
         var ox = cx + (R + 13) * Math.cos(mid), oy = cy + (R + 13) * Math.sin(mid) + 4;
@@ -922,7 +998,13 @@
     }
     box.innerHTML = ''; box.appendChild(svg);
     if (listBox) listBox.innerHTML = slices.map(function(s){
-      return '<div class="drow"><i class="sw" style="background:' + s.c + '"></i><span class="nm">' +
+      /* a category carries its pictogram in the list too, on a chip of its own colour, so the
+         swatch names the slice instead of only colouring it */
+      var chip = CATICON[s.n]
+        ? '<i class="catchip" style="background:' + s.c + '">' +
+          catGlyphHTML(s.n, 15, '#fff') + '</i>'
+        : '<i class="sw" style="background:' + s.c + '"></i>';
+      return '<div class="drow">' + chip + '<span class="nm">' +
              esc(s.n) + '</span><span class="vl">' + fmt(s.v) + '</span><span class="pc">' + pct(s.v, total) + '%</span></div>';
     }).join('');
   }
@@ -1532,8 +1614,8 @@
       (off.length ? ' Hidden: ' + off.join(', ') + '.' : '');
 
     /* 2 · by category, one ring per kind */
-    var catBlue = { Health:C.catHealth, Safety:C.catSafety,
-                    Security:C.catSecurity, Environment:C.catEnv };
+    var catViolet = { Health:C.catHealth, Safety:C.catSafety,
+                      Security:C.catSecurity, Environment:C.catEnv };
     var catOrange = { Health:C.catAHealth, Safety:C.catASafety,
                       Security:C.catASecurity, Environment:C.catAEnv };
     var catGood = H.categories.reduce(function(a, r){ return a + r.good; }, 0);
@@ -1557,9 +1639,9 @@
                         pct(st, r.anom) + '%.' : word,
                  d:st ? 'and ' + pct(st, SC.used) + '% of all the ' + fmt(SC.used) +
                         ' Stop Cards over the period.' : '' }; }),
-            null, function(sl){ return sl.w; }, true, true);
+            'TICKS', function(sl){ return sl.w; }, true, true);
     }
-    catRing('h-cats-good', 'h-cats-good-list', 'good', catBlue, 'good practices');
+    catRing('h-cats-good', 'h-cats-good-list', 'good', catViolet, 'good practices');
     catRing('h-cats-anom', 'h-cats-anom-list', 'anom', catOrange, 'anomalies');
     var catStopSum = H.categories.reduce(function(a, r){ return a + (catStop[r.name] || 0); }, 0);
     $('h-cats-note').textContent =
@@ -1567,14 +1649,22 @@
       ' on the good practice side and ' + fmt(catAnom) + ' on the anomaly side, not the ' +
       fmt(H.submitted) + ' observations: one observation can carry several categories. The ' +
       'percentages on the ring are shares of those numbers. In the hover, the Stop Card ' +
-      'shares of the period add up to more than 100% for the same reason: the ' + fmt(SC.used) +
-      ' Stop Cards are counted once under each category their anomaly ticked, ' +
-      fmt(catStopSum) + ' times in all.';
+      'shares of the period add up to more than 100% for the same reason: the ' +
+      fmt(SC.used) + ' Stop Cards are counted once under each category their anomaly ' +
+      'ticked, ' + fmt(catStopSum) + ' times in all.';
 
     /* 2b · anomalies by golden rules */
-    var rules = H.rules.slice().sort(function(a, b){ return b.anom - a.anom; });
+    /* drawn in the form's own order, not by volume: the rules are numbered on the form and
+       a reader looking for rule 7 should find it in seventh place. The payload carries them
+       in that order, so the index is the number. */
+    var rules = H.rules.slice();
+    /* the bar carries the number alone and the names are written out under the chart:
+       spelled in full on every bar, the label column swallowed a third of the width and
+       two of the twelve wrapped onto a second line */
+    function ruleNo(i){ return 'Golden Rule N°' + (i + 1); }
+    function ruleLabel(i){ return ruleNo(i) + ' · ' + rules[i].name; }
     /* clicking a rule opens the Observed anomaly list ticked under it in the form */
-    function ruleModal(r){
+    function ruleModal(r, title){
       var S = r.situations || { rows:[], unspecified:0, compliant:0 };
       /* the list is the form's own, Compliant included, in the same words */
       var rows = S.rows.concat(S.compliant ? [{ name:'Compliant', anom:S.compliant }] : [])
@@ -1591,12 +1681,19 @@
       body += '<p class="footnote" style="margin-top:12px">An anomaly can tick several lines at once, so ' +
               'they add up to more than the ' + fmt(r.anom) + ' anomalies that ticked this rule. The list ' +
               'is optional, so one line counts those who ticked the rule and left it empty.</p>';
-      openModal(r.name, fmt(r.anom) + ' anomalies ticked this rule', body);
+      openModal(title || r.name, fmt(r.anom) + ' anomalies ticked this rule', body);
     }
     var ruleSeries = [{ name:'Anomaly', color:C.anom,
                         data:rules.map(function(r){ return r.anom; }) }];
     bars($('h-rules'), {
-      categories:rules.map(function(r){ return r.name; }),
+      categories:rules.map(function(r, i){ return ruleLabel(i); }),
+      /* the number keeps the first line but takes the quiet format, small and grey: it only
+         places the rule in the form's list. The name sits under it and carries the weight,
+         since it is what names the bar */
+      labelRows:function(i){
+        return [{ t:ruleNo(i), size:10.5, fill:C.ink3 },
+                { t:rules[i].name, size:12, weight:600 }]; },
+      tipTitle:function(i){ return ruleLabel(i); },
       series:ruleSeries, valueLabels:true, rowH:30,
       inset:{ name:'Stop Card used', color:C.stop, hatch:C.hatch,
               data:rules.map(function(r){ return stopByRule[r.name] || 0; }) },
@@ -1612,13 +1709,14 @@
             ' Stop Cards over the period.'
           : '<b>' + fmt(r.anom) + '</b> anomalies';
       },
-      onPick:function(i){ ruleModal(rules[i]); } });
+      onPick:function(i){ ruleModal(rules[i], ruleLabel(i)); } });
     $('h-rules-keys').innerHTML =
       '<span class="key"><i class="sw" style="background:' + C.anom + '"></i> Anomalies by rule</span>' +
       '<span class="key"><i class="sw" style="background:' + HATCH + '"></i> Where a Stop Card was used</span>';
     var ruleSum = rules.reduce(function(a, r){ return a + r.anom; }, 0);
     $('h-rules-note').textContent =
-      'Sorted by volume. An anomaly can tick several golden rules, so the bars add up to ' +
+      'In the order of the twelve Golden Rules on the form, not by volume. An anomaly can ' +
+      'tick several Golden Rules, so the bars add up to ' +
       fmt(ruleSum) + ', more than the ' + fmt(H.anom) + ' anomalies.';
 
     /* 5 · comparison */
@@ -1701,6 +1799,3 @@
   var t; addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ render(); drawCross(); renderHse(); }, 160); });
 })();
 </script>
-
-</body>
-</html>
