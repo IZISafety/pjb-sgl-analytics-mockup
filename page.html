@@ -14,6 +14,9 @@
     --obs-anom-ink:#C44F00;                 /* the same orange, darkened for text on white */
     /* the four HSE categories: one colour per ring at four densities, as if the same ink
        were laid thinner. Safety carries it at full strength, 74%, 56% and 40% follow */
+    /* one hue per ring, laid at four densities: the violet of the good practice on the left
+       ring, the safety orange of the anomaly on the right. Safety carries the full strength,
+       then 74%, 56% and 40%, fixed per category rather than per rank */
     --cat-safety:#6C20DF; --cat-health:#925AE7; --cat-security:#AD82ED; --cat-env:#C4A6F2;
     --cata-safety:#FF6700; --cata-health:#FF8F42; --cata-security:#FFAA70; --cata-env:#FFC299;
     --new-bg:#e6ecf5; --new-ink:#004196;
@@ -132,8 +135,14 @@
     .rings .ringbox + .ringbox{border-left:0; border-top:1px solid #dde3e7; padding-top:18px; margin-top:4px}
   }
   .ring-h{margin:0; font-size:13px; font-weight:650; color:var(--ink)}
+  /* the kind is named with the colour that draws it, so the ring below needs no legend */
+  .ring-h.kind{display:flex; align-items:center; gap:7px}
   .ring-head{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
   .pill.keep{background:var(--surface-2); color:var(--ink-3)}
+  /* named catchip and not chip: a .chip rule already exists further down for the status
+     pills, and it was overriding the layout of this one */
+  .catchip{width:23px; height:23px; border-radius:6px; flex:none; display:flex;
+           align-items:center; justify-content:center; padding:0}
   .drow{display:flex; align-items:center; gap:9px; font-size:13px}
   .drow .nm{color:var(--ink-2); flex:1 1 auto; min-width:0}
   .drow .vl{font-variant-numeric:tabular-nums; font-weight:650}
@@ -474,12 +483,12 @@
       <p class="panel-sub">Health, Safety, Security and Environment, on one ring for the good practice and one for the anomalies.</p>
       <div class="grid two" style="margin-bottom:0">
         <div>
-          <h4 class="ring-h">Good practice</h4>
+          <h4 class="ring-h kind"><i class="sw" style="background:var(--obs-good)"></i>Good practice</h4>
           <div class="chart" id="h-cats-good" data-h="290"></div>
           <div class="dlist" id="h-cats-good-list"></div>
         </div>
         <div>
-          <h4 class="ring-h">Anomaly</h4>
+          <h4 class="ring-h kind"><i class="sw" style="background:var(--obs-anom)"></i>Anomaly</h4>
           <div class="chart" id="h-cats-anom" data-h="290"></div>
           <div class="dlist" id="h-cats-anom-list"></div>
         </div>
@@ -490,8 +499,8 @@
 
   <div class="grid">
     <section class="card panel">
-      <div class="panel-head"><h3>Anomalies by Golden rules</h3></div>
-      <p class="panel-sub">A bar counts the anomalies that ticked the rule, including those where the rule was found compliant. Click on the bar for more details. A good practice carries no golden rule.</p>
+      <div class="panel-head"><h3>Anomalies by Golden Rules</h3></div>
+      <p class="panel-sub">A bar counts the anomalies that ticked the Golden Rule, including those where it was found compliant.<br>&#128073; <strong>Click on a bar to view the detailed breakdown of the selected Golden Rule.</strong></p>
       <div class="chart" id="h-rules"></div>
       <div class="keys" id="h-rules-keys"></div>
       <p class="footnote" id="h-rules-note"></p>
@@ -502,7 +511,7 @@
   <div class="grid">
     <section class="card panel">
       <div class="panel-head"><h3>Comparison of results</h3><label class="typepick">Type <select id="pick-h-cmp"><option value="stacked" selected>Stacked bars</option><option value="grouped">Grouped bars</option><option value="table">Table</option></select></label></div>
-      <p class="panel-sub">How observations break down across companies, sites, workspaces and categories.</p>
+      <p class="panel-sub">How observations break down across companies, sites and workspaces.</p>
       <div class="controls">
         <div class="seg" id="h-seg-dim" role="group" aria-label="Dimension">
           <button type="button" data-v="companies" aria-pressed="true">By company</button>
@@ -601,6 +610,47 @@
     return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
   }
   function onColour(bg){ return lum(bg) > 0.25 ? '#1f2a30' : '#fff'; }
+  /* one pictogram per observation category, drawn at the same stroke weight as the golden
+     rule pictograms. Paths only, on a 24 by 24 grid, so the same glyph serves the ring, the
+     list and any size without a second file */
+  var CATICON = {
+    Safety:['M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5',
+            'M14 6a6 6 0 0 1 6 6v3', 'M4 15v-3a6 6 0 0 1 6-6',
+            'M3 15h18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z'],
+    Health:['M12 20.5S3.5 15.6 3.5 9.6A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.5 2.6c0 6-8.5 10.9-8.5 10.9z',
+            'M6.5 12.5h3l1.5-2.5 2 4.5 1.5-2h3'],
+    Security:['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', 'M9 12l2 2 4-4'],
+    Environment:['M12 21v-9', 'M12 12.5C12 8.5 9 6 4.5 6c0 4 3 6.5 7.5 6.5z',
+                 'M12 10c0-3.3 2.6-5.5 7-5.5 0 3.3-2.6 5.5-7 5.5z', 'M8 21h8']
+  };
+
+  /* each drawing fills its own part of the 24 by 24 grid: a helmet sits low on its brim, a
+     shield reaches the top. Centring the box therefore does not centre the ink, so every
+     glyph carries the shift that puts its own ink box on the middle */
+  var CATNUDGE = { Safety:[0, 0], Health:[0, 0], Security:[0, 0], Environment:[0, 0] };
+  /* an svg element for the ring, where the glyph is placed and scaled by hand */
+  function catGlyph(name, x, y, size, colour){
+    var d = CATICON[name]; if (!d) return null;
+    var k = size / 24;
+    var g = el('g', { transform:'translate(' + (x - size / 2) + ',' + (y - size / 2) + ') scale(' + k + ')',
+                      fill:'none', stroke:colour, 'stroke-width':1.8 / k * (k / k),
+                      'stroke-linecap':'round', 'stroke-linejoin':'round' });
+    g.setAttribute('stroke-width', 2.2);
+    var n = CATNUDGE[name] || [0, 0];
+    var inner = el('g', { transform:'translate(' + n[0] + ',' + n[1] + ')' });
+    d.forEach(function(p){ inner.appendChild(el('path', { d:p })); });
+    g.appendChild(inner);
+    return g;
+  }
+  /* the same glyph as markup, for the list under the ring */
+  function catGlyphHTML(name, size, colour){
+    var d = CATICON[name]; if (!d) return '';
+    var n = CATNUDGE[name] || [0, 0];
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' +
+           colour + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+           '<g transform="translate(' + n[0] + ',' + n[1] + ')">' +
+           d.map(function(p){ return '<path d="' + p + '"/>'; }).join('') + '</g></svg>';
+  }
   var NS = 'http://www.w3.org/2000/svg';
   var mode = 'all', dim = 'companies', msr = 'volume', vol = 'volume';
   var cmpShow = { go:true, gac:true, stop:true };
@@ -701,11 +751,14 @@
     var hid = 'hx-' + (box.id || 'c');
     if (cfg.inset){
       var defs = el('defs', {});
-      var pat = el('pattern', { id:hid, width:10, height:10,
+      /* pitch 5 rather than 10: one stripe between every two, so the gaps close up and the
+         hatching reads as a texture instead of as a few painted bands. The stripe thins with
+         the pitch, since keeping 4.6 at this spacing would leave no orange between two */
+      var pat = el('pattern', { id:hid, width:5, height:5,
                                 patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
-      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:5,
                                    stroke:cfg.inset.hatch || cfg.inset.color,
-                                   'stroke-width':4.6 }));
+                                   'stroke-width':2.9 }));
       defs.appendChild(pat); svg.appendChild(defs);
     }
     tk.forEach(function(t){
@@ -766,7 +819,11 @@
     if (!box) return;
     var W = box.clientWidth || 600;
     var labelW = Math.min(Math.max(84, W * 0.36), 240);
-    var lines = cfg.categories.map(function(c){ return wrapText(c, Math.floor(labelW / 6.1)); });
+    /* a row label is normally one wrapped string; labelRows lets a chart give its own
+       lines, each with its own size, so a number can head a name written smaller */
+    var lines = cfg.categories.map(function(c, i){
+      return cfg.labelRows ? cfg.labelRows(i)
+           : wrapText(c, Math.floor(labelW / 6.1)).map(function(t){ return { t:t }; }); });
     var gap = 13;
     var minRow = (cfg.rowH || 32) * (cfg.grouped ? 1.35 : 1);
     var rows = cfg.categories.map(function(_, i){ return Math.max(minRow, lines[i].length * 14 + 12); });
@@ -784,30 +841,45 @@
     var hid = 'hx-' + (box.id || 'b');
     if (cfg.inset){
       var defs = el('defs', {});
-      var pat = el('pattern', { id:hid, width:10, height:10,
+      /* pitch 5 rather than 10: one stripe between every two, so the gaps close up and the
+         hatching reads as a texture instead of as a few painted bands. The stripe thins with
+         the pitch, since keeping 4.6 at this spacing would leave no orange between two */
+      var pat = el('pattern', { id:hid, width:5, height:5,
                                 patternUnits:'userSpaceOnUse', patternTransform:'rotate(45)' });
-      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:10,
+      pat.appendChild(el('line', { x1:0, y1:0, x2:0, y2:5,
                                    stroke:cfg.inset.hatch || cfg.inset.color,
-                                   'stroke-width':4.6 }));
+                                   'stroke-width':2.9 }));
       defs.appendChild(pat); svg.appendChild(defs);
     }
     var nS = cfg.series.length, grouped = !!cfg.grouped;
+    /* the same grid the charts over time carry, turned on its side: without it a horizontal
+       bar is read against nothing and two close lengths cannot be told apart. Drawn first,
+       so the bars sit over it rather than under it */
+    for (var g = 1; g <= 4; g++){
+      var gx = mL + (pw * g) / 4;
+      svg.appendChild(el('line', { x1:gx, x2:gx, y1:mT, y2:H - 10,
+                                   stroke:C.line2, 'stroke-width':1 }));
+    }
     var y = mT;
     cfg.categories.forEach(function(cat, i){
       var h = rows[i], bh = Math.min(26, h - 6), by = y + (h - bh) / 2, acc = 0;
+      /* the drawn label can be shorter than the row's full name, so the hover and the
+         screen reader get the long form while the axis keeps the short one */
+      var ttl = cfg.tipTitle ? cfg.tipTitle(i) : cat;
       var gh = grouped ? Math.max(5, (bh - 2 * (nS - 1)) / nS) : bh;
       if (cfg.onPick){
         var hit = el('rect', { x:0, y:y, width:W, height:h, fill:'transparent',
                                style:'cursor:pointer', role:'button', tabindex:'0',
-                               'aria-label':cat + ', open the detail' });
+                               'aria-label':ttl + ', open the detail' });
         hit.addEventListener('click', function(){ cfg.onPick(i); });
         hit.addEventListener('keydown', function(e){
           if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); cfg.onPick(i); } });
         svg.appendChild(hit);
       }
       lines[i].forEach(function(ln, k){
-        svg.appendChild(txt(labelW, y + (h - lines[i].length * 14) / 2 + 11 + k * 14, ln,
-                            { anchor:'end', fill:C.ink2, size:12 })); });
+        svg.appendChild(txt(labelW, y + (h - lines[i].length * 14) / 2 + 11 + k * 14, ln.t,
+                            { anchor:'end', fill:ln.fill || C.ink2,
+                              size:ln.size || 12, weight:ln.weight })); });
       cfg.series.forEach(function(s, si){
         var v = s.data[i]; if (!v){ acc += v; return; }
         var w = (v / max) * pw;
@@ -819,7 +891,7 @@
           r.addEventListener('click', function(){ cfg.onPick(i); }); }
         /* tipBody writes the whole body when a row needs its own wording rather than the
            series name and its value */
-        bindTip(r, '<strong>' + esc(cat) + '</strong><br>' +
+        bindTip(r, '<strong>' + esc(ttl) + '</strong><br>' +
                    (cfg.tipBody ? cfg.tipBody(i)
                                 : esc(s.name) + ': <b>' + v + (cfg.suffix || '') + '</b>' +
                                   tipx(cfg, i, si, s)));
@@ -834,7 +906,7 @@
           var iw = Math.min((cfg.inset.data[i] / max) * pw, Math.max(1, w - gp));
           var ir = el('rect', { x:mL, y:by, width:Math.max(1, iw), height:bh,
                                 fill:'url(#' + hid + ')', rx:4, 'fill-opacity':1 });
-          bindTip(ir, '<strong>' + esc(cat) + '</strong><br>' +
+          bindTip(ir, '<strong>' + esc(ttl) + '</strong><br>' +
                       (cfg.tipBody ? cfg.tipBody(i)
                                    : esc(cfg.inset.name) + ': <b>' + cfg.inset.data[i] +
                                      '</b> of ' + v));
@@ -861,7 +933,9 @@
     var total = slices.reduce(function(a, s){ return a + s.v; }, 0);
     /* the ring always reserves room for an outside label, so two donuts side by side
        come out the same size whether or not one of them has a small slice */
-    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.62, a0 = -Math.PI / 2;
+    /* the band is wide enough to carry a pictogram over its share: at 0.62 of the outer
+       radius the glyph and the figure filled it edge to edge */
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.52, a0 = -Math.PI / 2;
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
     slices.forEach(function(s){
       if (!s.v) return;
@@ -894,7 +968,18 @@
       var fits = label.length * 6.7 * Math.abs(Math.cos(mid)) + 6 <= (R - r);
       if (s.v / total > 0.09 && fits){
         var lr = (R + r) / 2;
-        svg.appendChild(txt(cx + lr * Math.cos(mid), cy + lr * Math.sin(mid) + 4, label,
+        var lx = cx + lr * Math.cos(mid), ly = cy + lr * Math.sin(mid);
+        /* the pictogram sits above the share, both on the band's mid radius, and only when
+           the band is thick enough to carry the two without them touching its edges */
+        /* the pair is centred on the band as one block: the glyph's own height plus the gap
+           plus the cap height of the figure, so neither of them drifts towards an edge */
+        var gs = 23, gap = 2, cap = 9, blockH = gs + gap + cap;
+        /* the pictogram is white on every slice of both rings, settled. It is a mark, not a
+           label: the share under it keeps the contrast driven ink, and the category is named
+           in the list and in the hover, so nothing is carried by the white alone */
+        var gl = (R - r) >= 38 ? catGlyph(s.n, lx, ly - blockH / 2 + gs / 2, gs, '#fff') : null;
+        if (gl) svg.appendChild(gl);
+        svg.appendChild(txt(lx, gl ? ly + blockH / 2 : ly + 4, label,
                             { anchor:'middle', fill:onColour(s.c), weight:700, size:12 }));
       } else {
         var ox = cx + (R + 13) * Math.cos(mid), oy = cy + (R + 13) * Math.sin(mid) + 4;
@@ -913,7 +998,13 @@
     }
     box.innerHTML = ''; box.appendChild(svg);
     if (listBox) listBox.innerHTML = slices.map(function(s){
-      return '<div class="drow"><i class="sw" style="background:' + s.c + '"></i><span class="nm">' +
+      /* a category carries its pictogram in the list too, on a chip of its own colour, so the
+         swatch names the slice instead of only colouring it */
+      var chip = CATICON[s.n]
+        ? '<i class="catchip" style="background:' + s.c + '">' +
+          catGlyphHTML(s.n, 15, '#fff') + '</i>'
+        : '<i class="sw" style="background:' + s.c + '"></i>';
+      return '<div class="drow">' + chip + '<span class="nm">' +
              esc(s.n) + '</span><span class="vl">' + fmt(s.v) + '</span><span class="pc">' + pct(s.v, total) + '%</span></div>';
     }).join('');
   }
@@ -1523,8 +1614,8 @@
       (off.length ? ' Hidden: ' + off.join(', ') + '.' : '');
 
     /* 2 · by category, one ring per kind */
-    var catBlue = { Health:C.catHealth, Safety:C.catSafety,
-                    Security:C.catSecurity, Environment:C.catEnv };
+    var catViolet = { Health:C.catHealth, Safety:C.catSafety,
+                      Security:C.catSecurity, Environment:C.catEnv };
     var catOrange = { Health:C.catAHealth, Safety:C.catASafety,
                       Security:C.catASecurity, Environment:C.catAEnv };
     var catGood = H.categories.reduce(function(a, r){ return a + r.good; }, 0);
@@ -1548,9 +1639,9 @@
                         pct(st, r.anom) + '%.' : word,
                  d:st ? 'and ' + pct(st, SC.used) + '% of all the ' + fmt(SC.used) +
                         ' Stop Cards over the period.' : '' }; }),
-            null, function(sl){ return sl.w; }, true, true);
+            'TICKS', function(sl){ return sl.w; }, true, true);
     }
-    catRing('h-cats-good', 'h-cats-good-list', 'good', catBlue, 'good practices');
+    catRing('h-cats-good', 'h-cats-good-list', 'good', catViolet, 'good practices');
     catRing('h-cats-anom', 'h-cats-anom-list', 'anom', catOrange, 'anomalies');
     var catStopSum = H.categories.reduce(function(a, r){ return a + (catStop[r.name] || 0); }, 0);
     $('h-cats-note').textContent =
@@ -1558,14 +1649,22 @@
       ' on the good practice side and ' + fmt(catAnom) + ' on the anomaly side, not the ' +
       fmt(H.submitted) + ' observations: one observation can carry several categories. The ' +
       'percentages on the ring are shares of those numbers. In the hover, the Stop Card ' +
-      'shares of the period add up to more than 100% for the same reason: the ' + fmt(SC.used) +
-      ' Stop Cards are counted once under each category their anomaly ticked, ' +
-      fmt(catStopSum) + ' times in all.';
+      'shares of the period add up to more than 100% for the same reason: the ' +
+      fmt(SC.used) + ' Stop Cards are counted once under each category their anomaly ' +
+      'ticked, ' + fmt(catStopSum) + ' times in all.';
 
     /* 2b · anomalies by golden rules */
-    var rules = H.rules.slice().sort(function(a, b){ return b.anom - a.anom; });
+    /* drawn in the form's own order, not by volume: the rules are numbered on the form and
+       a reader looking for rule 7 should find it in seventh place. The payload carries them
+       in that order, so the index is the number. */
+    var rules = H.rules.slice();
+    /* the bar carries the number alone and the names are written out under the chart:
+       spelled in full on every bar, the label column swallowed a third of the width and
+       two of the twelve wrapped onto a second line */
+    function ruleNo(i){ return 'Golden Rule N°' + (i + 1); }
+    function ruleLabel(i){ return ruleNo(i) + ' · ' + rules[i].name; }
     /* clicking a rule opens the Observed anomaly list ticked under it in the form */
-    function ruleModal(r){
+    function ruleModal(r, title){
       var S = r.situations || { rows:[], unspecified:0, compliant:0 };
       /* the list is the form's own, Compliant included, in the same words */
       var rows = S.rows.concat(S.compliant ? [{ name:'Compliant', anom:S.compliant }] : [])
@@ -1582,12 +1681,19 @@
       body += '<p class="footnote" style="margin-top:12px">An anomaly can tick several lines at once, so ' +
               'they add up to more than the ' + fmt(r.anom) + ' anomalies that ticked this rule. The list ' +
               'is optional, so one line counts those who ticked the rule and left it empty.</p>';
-      openModal(r.name, fmt(r.anom) + ' anomalies ticked this rule', body);
+      openModal(title || r.name, fmt(r.anom) + ' anomalies ticked this rule', body);
     }
     var ruleSeries = [{ name:'Anomaly', color:C.anom,
                         data:rules.map(function(r){ return r.anom; }) }];
     bars($('h-rules'), {
-      categories:rules.map(function(r){ return r.name; }),
+      categories:rules.map(function(r, i){ return ruleLabel(i); }),
+      /* the number keeps the first line but takes the quiet format, small and grey: it only
+         places the rule in the form's list. The name sits under it and carries the weight,
+         since it is what names the bar */
+      labelRows:function(i){
+        return [{ t:ruleNo(i), size:10.5, fill:C.ink3 },
+                { t:rules[i].name, size:12, weight:600 }]; },
+      tipTitle:function(i){ return ruleLabel(i); },
       series:ruleSeries, valueLabels:true, rowH:30,
       inset:{ name:'Stop Card used', color:C.stop, hatch:C.hatch,
               data:rules.map(function(r){ return stopByRule[r.name] || 0; }) },
@@ -1603,13 +1709,14 @@
             ' Stop Cards over the period.'
           : '<b>' + fmt(r.anom) + '</b> anomalies';
       },
-      onPick:function(i){ ruleModal(rules[i]); } });
+      onPick:function(i){ ruleModal(rules[i], ruleLabel(i)); } });
     $('h-rules-keys').innerHTML =
       '<span class="key"><i class="sw" style="background:' + C.anom + '"></i> Anomalies by rule</span>' +
       '<span class="key"><i class="sw" style="background:' + HATCH + '"></i> Where a Stop Card was used</span>';
     var ruleSum = rules.reduce(function(a, r){ return a + r.anom; }, 0);
     $('h-rules-note').textContent =
-      'Sorted by volume. An anomaly can tick several golden rules, so the bars add up to ' +
+      'In the order of the twelve Golden Rules on the form, not by volume. An anomaly can ' +
+      'tick several Golden Rules, so the bars add up to ' +
       fmt(ruleSum) + ', more than the ' + fmt(H.anom) + ' anomalies.';
 
     /* 5 · comparison */
