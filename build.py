@@ -184,18 +184,21 @@ assert sum(ep)+sum(pa)==EP["all"]["start"]
 # golden rules and categories are multi-select, so an observation can count in several
 # rows: these lists sum to more than the number of observations, never less.
 # a good practice carries no golden rule, so the rules only break down the anomalies
+# the order below is the form's own order, and it is the order the chart draws.
+# the counts are deliberately not descending, so the mockup shows a rule order that
+# is not a volume order. golden rule N is this list's Nth entry, counting from 1.
 RULES=[("Risky situations",        26),
-       ("PPE",                     21),
-       ("Body Mechanics & Tools",  18),
-       ("Work permit",             15),
        ("Traffic",                 14),
-       ("Work at height",          13),
+       ("Body Mechanics & Tools",  18),
+       ("PPE",                      9),
+       ("Work permit",              7),
        ("Lifting operations",      11),
-       ("Line of danger",          10),
-       ("Energized Systems",        9),
+       ("Energized Systems",       15),
        ("Confined spaces",          8),
-       ("Hot works",                7),
-       ("Excavation work",          6)]
+       ("Excavation work",         10),
+       ("Work at height",          21),
+       ("Hot works",               13),
+       ("Line of danger",           6)]
 CATS=[("Health",      41, 22),
       ("Safety",      96, 63),
       ("Security",    33, 19),
