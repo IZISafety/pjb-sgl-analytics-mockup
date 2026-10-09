@@ -935,7 +935,7 @@
        come out the same size whether or not one of them has a small slice */
     /* the band is wide enough to carry a pictogram over its share: at 0.62 of the outer
        radius the glyph and the figure filled it edge to edge */
-    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.52, a0 = -Math.PI / 2;
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 26, r = R * 0.58, a0 = -Math.PI / 2;
     var svg = el('svg', { viewBox:'0 0 ' + W + ' ' + H, width:W, height:H, role:'img' });
     slices.forEach(function(s){
       if (!s.v) return;
@@ -1639,7 +1639,7 @@
                         pct(st, r.anom) + '%.' : word,
                  d:st ? 'and ' + pct(st, SC.used) + '% of all the ' + fmt(SC.used) +
                         ' Stop Cards over the period.' : '' }; }),
-            'TICKS', function(sl){ return sl.w; }, true, true);
+            null, function(sl){ return sl.w; }, true, true);
     }
     catRing('h-cats-good', 'h-cats-good-list', 'good', catViolet, 'good practices');
     catRing('h-cats-anom', 'h-cats-anom-list', 'anom', catOrange, 'anomalies');
